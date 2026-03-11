@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الدروس - تعلم الكتابة السريعة</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+    <div class="container">
+        <div class="logo">
+            <img src="img/SIU.png" alt=" LECO Keyboard" style="height: 40px; width: auto; margin-left: 10px;">
+            <span>LECO Keyboard</span>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="index.html" id="nav-home">الرئيسية</a></li>
+            <li><a href="lessons.html" id="nav-lessons">الدروس</a></li>
+            <li><a href="exercises.html" id="nav-exercises">تمارين تفاعلية</a></li>
+            <li><a href="progress.html" id="nav-progress">تقدمي</a></li>
+            <li><a href="about.html" id="nav-about">عن الموقع</a></li>
+        </ul>
+        <div class="language-selector">
+            <select id="languageSelect" class="lang-select">
+                <option value="arabic">العربية</option>
+                <option value="english">English</option>
+            </select>
+        </div>
+        <div class="user-stats" id="userStats">
+            <span><i class="fas fa-star"></i> <span id="userPoints">0</span> نقطة</span>
+        </div>
+    </div>
+</nav>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <h2>الدروس التعليمية</h2>
+                <p>اختر الدرس المناسب لمستواك</p>
+            </div>
+        </section>
+
+        <section class="lessons-grid">
+            <div class="container">
+                <div class="level-tabs">
+                    <button class="level-tab active" onclick="filterLessons('beginner')">مبتدئ</button>
+                    <button class="level-tab" onclick="filterLessons('intermediate')">متوسط</button>
+                    <button class="level-tab" onclick="filterLessons('advanced')">متقدم</button>
+                </div>
+
+                <div class="lessons-container" id="lessonsContainer">
+                    <!-- الدروس ستظهر هنا من خلال JavaScript -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>جميع الحقوق محفوظة &copy; 2024</p>
+        </div>
+    </footer>
+
+    <script src="typing.js"></script>
+</body>
+</html>

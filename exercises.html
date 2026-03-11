@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تمارين تفاعلية - تعلم الكتابة السريعة</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+    <div class="container">
+        <div class="logo">
+            <img src="img/SIU.png" alt=" LECO Keyboard" style="height: 40px; width: auto; margin-left: 10px;">
+              <span>LECO Keyboard</span>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="index.html" id="nav-home">الرئيسية</a></li>
+            <li><a href="lessons.html" id="nav-lessons">الدروس</a></li>
+            <li><a href="exercises.html" id="nav-exercises">تمارين تفاعلية</a></li>
+            <li><a href="progress.html" id="nav-progress">تقدمي</a></li>
+            <li><a href="about.html" id="nav-about">عن الموقع</a></li>
+        </ul>
+        <div class="language-selector">
+            <select id="languageSelect" class="lang-select">
+                <option value="arabic">العربية</option>
+                <option value="english">English</option>
+            </select>
+        </div>
+        <div class="user-stats" id="userStats">
+            <span><i class="fas fa-star"></i> <span id="userPoints">0</span> نقطة</span>
+        </div>
+    </div>
+</nav>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <h2>تمارين تفاعلية</h2>
+                <p>تدرب على الكتابة مع ألعاب وتحديات ممتعة</p>
+            </div>
+        </section>
+
+        <section class="typing-exercise">
+            <div class="container">
+                <div class="exercise-header">
+                    <h3>تمرين الكتابة الحرة</h3>
+                    <div class="exercise-controls">
+                        <select id="difficulty">
+                            <option value="easy">سهل</option>
+                            <option value="medium">متوسط</option>
+                            <option value="hard">صعب</option>
+                        </select>
+                        <select id="timeLimit">
+                            <option value="60">60 ثانية</option>
+                            <option value="120">دقيقتان</option>
+                            <option value="300">5 دقائق</option>
+                        </select>
+                        <button class="btn" onclick="startTypingExercise()">ابدأ التمرين</button>
+                    </div>
+                </div>
+
+                <div class="exercise-area">
+                    <div class="target-text" id="targetText"></div>
+                    <textarea id="typingArea" placeholder="ابدأ الكتابة هنا..." disabled></textarea>
+                    
+                    <div class="exercise-stats">
+                        <div class="stat-box">
+                            <span class="stat-label">السرعة</span>
+                            <span class="stat-value" id="currentSpeed">0</span>
+                            <span class="stat-unit">ك/د</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-label">الدقة</span>
+                            <span class="stat-value" id="currentAccuracy">100</span>
+                            <span class="stat-unit">%</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-label">الوقت المتبقي</span>
+                            <span class="stat-value" id="timeLeft">60</span>
+                            <span class="stat-unit">ث</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-label">الأخطاء</span>
+                            <span class="stat-value" id="errors">0</span>
+                        </div>
+                    </div>
+
+                    <div class="virtual-keyboard" id="virtualKeyboard">
+                        <!-- سيتم إنشاء لوحة المفاتيح الافتراضية عبر JavaScript -->
+                    </div>
+                </div>
+
+                <div class="exercise-results" id="exerciseResults" style="display: none;">
+                    <h3>نتيجة التمرين</h3>
+                    <div class="results-grid">
+                        <div class="result-item">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span class="result-label">السرعة القصوى:</span>
+                            <span class="result-value" id="maxSpeed">0</span>
+                            <span>ك/د</span>
+                        </div>
+                        <div class="result-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span class="result-label">متوسط الدقة:</span>
+                            <span class="result-value" id="avgAccuracy">0</span>
+                            <span>%</span>
+                        </div>
+                        <div class="result-item">
+                            <i class="fas fa-keyboard"></i>
+                            <span class="result-label">إجمالي الضغطات:</span>
+                            <span class="result-value" id="totalKeystrokes">0</span>
+                        </div>
+                        <div class="result-item">
+                            <i class="fas fa-star"></i>
+                            <span class="result-label">النقاط المكتسبة:</span>
+                            <span class="result-value" id="earnedPoints">0</span>
+                        </div>
+                    </div>
+                    <button class="btn" onclick="saveAndContinue()">حفظ النتيجة والمتابعة</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>جميع الحقوق محفوظة &copy; 2024</p>
+        </div>
+    </footer>
+
+    <script src="typing.js"></script>
+</body>
+</html>

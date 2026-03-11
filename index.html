@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تعلم الكتابة السريعة - الرئيسية</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+       <nav class="navbar">
+    <div class="container">
+        <div class="logo">
+            <img src="img/SIU.png" alt=" LECO Keyboard" style="height: 40px; width: auto; margin-left: 10px;">
+            <span>LECO Keyboard</span>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="index.html" id="nav-home">الرئيسية</a></li>
+            <li><a href="lessons.html" id="nav-lessons">الدروس</a></li>
+            <li><a href="exercises.html" id="nav-exercises">تمارين تفاعلية</a></li>
+            <li><a href="progress.html" id="nav-progress">تقدمي</a></li>
+            <li><a href="about.html" id="nav-about">عن الموقع</a></li>
+        </ul>
+        <div class="language-selector">
+            <select id="languageSelect" class="lang-select">
+                <option value="arabic">العربية</option>
+                <option value="english">English</option>
+            </select>
+        </div>
+        <div class="user-stats" id="userStats">
+            <span><i class="fas fa-star"></i> <span id="userPoints">0</span> نقطة</span>
+        </div>
+    </div>
+</nav>
+    </header>
+
+    <main>
+        <section class="hero typing-hero">
+            <div class="container">
+                <h2>أتقن الكتابة السريعة على الكيبورد</h2>
+                <p>تعلم الكتابة بسرعة 60 كلمة في الدقيقة مع تمارين تفاعلية وممتعة</p>
+                <div class="typing-speed-test">
+                    <h3>اختبر سرعتك الآن</h3>
+                    <div class="test-container">
+                        <p class="test-text" id="testText">مرحبا بكم في موقع تعليم الكتابة السريعة</p>
+                        <input type="text" id="userInput" placeholder="ابدأ الكتابة هنا..." disabled>
+                        <div class="test-stats">
+                            <span><i class="fas fa-clock"></i> الوقت: <span id="timer">0</span> ثانية</span>
+                            <span><i class="fas fa-tachometer-alt"></i> السرعة: <span id="speed">0</span> ك/د</span>
+                            <span><i class="fas fa-check-circle"></i> الدقة: <span id="accuracy">0</span>%</span>
+                        </div>
+                        <button class="btn" id="startTest">ابدأ الاختبار</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="container">
+                <h2 class="section-title">لماذا تتعلم معنا؟</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-graduation-cap"></i>
+                        <h3>دروس منظمة</h3>
+                        <p>منهج متكامل من المبتدئين حتى الاحتراف</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-gamepad"></i>
+                        <h3>تمارين تفاعلية</h3>
+                        <p>ألعاب وتمارين ممتعة لتحسين سرعتك</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>تتبع التقدم</h3>
+                        <p>إحصائيات مفصلة عن تطور مستواك</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-trophy"></i>
+                        <h3>شهادات إنجاز</h3>
+                        <p>احصل على شهادات عند إتمام المستويات</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+       <section class="keyboard-layout">
+    <div class="container">
+        <h2 class="section-title">تعلم وضع الأصابع الصحيح</h2>
+        <div class="keyboard-diagram">
+            <!-- الصف الأول (الأرقام) -->
+            <div class="keyboard-row">
+                <div class="key" style="background: #f56565;">1</div>
+                <div class="key" style="background: #f56565;">2</div>
+                <div class="key" style="background: #ed8936;">3</div>
+                <div class="key" style="background: #ed8936;">4</div>
+                <div class="key" style="background: #48bb78;">5</div>
+                <div class="key" style="background: #48bb78;">6</div>
+                <div class="key" style="background: #4299e1;">7</div>
+                <div class="key" style="background: #4299e1;">8</div>
+                <div class="key" style="background: #9f7aea;">9</div>
+                <div class="key" style="background: #9f7aea;">0</div>
+                <div class="key" style="background: #f56565;">-</div>
+                <div class="key" style="background: #f56565;">=</div>
+            </div>
+            
+            <!-- الصف الثاني (QWERTY) -->
+            <div class="keyboard-row">
+                <div class="key" style="background: #f56565;">q</div>
+                <div class="key" style="background: #f56565;">w</div>
+                <div class="key" style="background: #ed8936;">e</div>
+                <div class="key" style="background: #ed8936;">r</div>
+                <div class="key" style="background: #48bb78;">t</div>
+                <div class="key" style="background: #48bb78;">y</div>
+                <div class="key" style="background: #4299e1;">u</div>
+                <div class="key" style="background: #4299e1;">i</div>
+                <div class="key" style="background: #9f7aea;">o</div>
+                <div class="key" style="background: #9f7aea;">p</div>
+                <div class="key" style="background: #f56565;">[</div>
+                <div class="key" style="background: #f56565;">]</div>
+                <div class="key" style="background: #f56565;">\</div>
+            </div>
+            
+            <!-- الصف الثالث (ASDF) -->
+            <div class="keyboard-row">
+                <div class="key" style="background: #f56565;">a</div>
+                <div class="key" style="background: #f56565;">s</div>
+                <div class="key" style="background: #ed8936;">d</div>
+                <div class="key" style="background: #ed8936;">f</div>
+                <div class="key" style="background: #48bb78;">g</div>
+                <div class="key" style="background: #48bb78;">h</div>
+                <div class="key" style="background: #4299e1;">j</div>
+                <div class="key" style="background: #4299e1;">k</div>
+                <div class="key" style="background: #9f7aea;">l</div>
+                <div class="key" style="background: #9f7aea;">;</div>
+                <div class="key" style="background: #f56565;">'</div>
+            </div>
+            
+            <!-- الصف الرابع (ZXCV) -->
+            <div class="keyboard-row">
+                <div class="key" style="background: #f56565;">z</div>
+                <div class="key" style="background: #f56565;">x</div>
+                <div class="key" style="background: #ed8936;">c</div>
+                <div class="key" style="background: #ed8936;">v</div>
+                <div class="key" style="background: #48bb78;">b</div>
+                <div class="key" style="background: #48bb78;">n</div>
+                <div class="key" style="background: #4299e1;">m</div>
+                <div class="key" style="background: #4299e1;">,</div>
+                <div class="key" style="background: #9f7aea;">.</div>
+                <div class="key" style="background: #9f7aea;">/</div>
+            </div>
+        </div>
+        
+        <!-- دليل الألوان -->
+        <div class="finger-guide">
+            <div class="guide-item">
+                <span class="color-box" style="background: #f56565;"></span>
+                <span>الخنصر</span>
+            </div>
+            <div class="guide-item">
+                <span class="color-box" style="background: #ed8936;"></span>
+                <span>البنصر</span>
+            </div>
+            <div class="guide-item">
+                <span class="color-box" style="background: #48bb78;"></span>
+                <span>الوسطى</span>
+            </div>
+            <div class="guide-item">
+                <span class="color-box" style="background: #4299e1;"></span>
+                <span>السبابة (يسار)</span>
+            </div>
+            <div class="guide-item">
+                <span class="color-box" style="background: #9f7aea;"></span>
+                <span>السبابة (يمين)</span>
+            </div>
+        </div>
+    </div>
+       </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>جميع الحقوق محفوظة &copy; 2024 - موقع تعليم الكتابة السريعة</p>
+        </div>
+    </footer>
+
+    <script src="typing.js"></script>
+</body>
+</html>

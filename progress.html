@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تقدمي - تعلم الكتابة السريعة</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+       <nav class="navbar">
+    <div class="container">
+        <div class="logo">
+            <img src="img/SIU.png" alt=" LECO Keyboard" style="height: 40px; width: auto; margin-left: 10px;">
+            <span>LECO Keyboard</span>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="index.html" id="nav-home">الرئيسية</a></li>
+            <li><a href="lessons.html" id="nav-lessons">الدروس</a></li>
+            <li><a href="exercises.html" id="nav-exercises">تمارين تفاعلية</a></li>
+            <li><a href="progress.html" id="nav-progress">تقدمي</a></li>
+            <li><a href="about.html" id="nav-about">عن الموقع</a></li>
+        </ul>
+        <div class="language-selector">
+            <select id="languageSelect" class="lang-select">
+                <option value="arabic">العربية</option>
+                <option value="english">English</option>
+            </select>
+        </div>
+        <div class="user-stats" id="userStats">
+            <span><i class="fas fa-star"></i> <span id="userPoints">0</span> نقطة</span>
+        </div>
+    </div>
+</nav>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <h2>تتبع تقدمك</h2>
+                <p>إحصائيات مفصلة عن تطور مستواك</p>
+            </div>
+        </section>
+
+        <section class="progress-stats">
+            <div class="container">
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <div class="stat-info">
+                            <span class="stat-title">متوسط السرعة</span>
+                            <span class="stat-number" id="avgSpeed">45</span>
+                            <span class="stat-unit">كلمة/دقيقة</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-check-double"></i>
+                        <div class="stat-info">
+                            <span class="stat-title">الدقة</span>
+                            <span class="stat-number" id="avgAccuracy">92</span>
+                            <span class="stat-unit">%</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-clock"></i>
+                        <div class="stat-info">
+                            <span class="stat-title">وقت التدريب</span>
+                            <span class="stat-number" id="totalTime">15.5</span>
+                            <span class="stat-unit">ساعة</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-trophy"></i>
+                        <div class="stat-info">
+                            <span class="stat-title">المستوى</span>
+                            <span class="stat-number" id="userLevel">متوسط</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progress-charts">
+                    <div class="chart-container">
+                        <h3>تطور السرعة</h3>
+                        <canvas id="speedChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>تطور الدقة</h3>
+                        <canvas id="accuracyChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="achievements">
+                    <h3>الإنجازات</h3>
+                    <div class="achievements-grid" id="achievementsList">
+                        <!-- الإنجازات ستظهر هنا -->
+                    </div>
+                </div>
+
+                <div class="badges">
+                    <h3>الشارات التي حصلت عليها</h3>
+                    <div class="badges-grid" id="badgesList">
+                        <!-- الشارات ستظهر هنا -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>جميع الحقوق محفوظة &copy; 2024</p>
+        </div>
+    </footer>
+
+    <script src="typing.js"></script>
+</body>
+</html>
