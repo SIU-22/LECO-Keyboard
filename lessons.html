@@ -16,21 +16,25 @@
             <img src="img/SIU.png" alt=" LECO Keyboard" style="height: 40px; width: auto; margin-left: 10px;">
             <span>LECO Keyboard</span>
         </div>
+        <button class="menu-toggle" id="mobile-menu-toggle" aria-label="فتح القائمة">
+            <i class="fas fa-bars"></i>
+        </button>
         <ul class="nav-menu">
-            <li><a href="index.html" id="nav-home">الرئيسية</a></li>
-            <li><a href="lessons.html" id="nav-lessons">الدروس</a></li>
-            <li><a href="exercises.html" id="nav-exercises">تمارين تفاعلية</a></li>
-            <li><a href="progress.html" id="nav-progress">تقدمي</a></li>
-            <li><a href="about.html" id="nav-about">عن الموقع</a></li>
+            <li><a href="index.html" id="nav-home" data-i18n="nav-home">الرئيسية</a></li>
+            <li><a href="lessons.html" id="nav-lessons" data-i18n="nav-lessons" class="active">الدروس</a></li>
+            <li><a href="exercises.html" id="nav-exercises" data-i18n="nav-exercises">تمارين تفاعلية</a></li>
+            <li><a href="progress.html" id="nav-progress" data-i18n="nav-progress">تقدمي</a></li>
+            <li><a href="programming.html" id="nav-programming" data-i18n="nav-programming">تعلم البرمجة</a></li>
+            <li><a href="about.html" id="nav-about" data-i18n="nav-about">عن الموقع</a></li>
         </ul>
         <div class="language-selector">
-            <select id="languageSelect" class="lang-select">
-                <option value="arabic">العربية</option>
-                <option value="english">English</option>
-            </select>
+            <button id="languageToggle" class="lang-toggle-btn">
+                <i class="fas fa-globe"></i>
+                <span id="currentLangText">العربية</span>
+            </button>
         </div>
         <div class="user-stats" id="userStats">
-            <span><i class="fas fa-star"></i> <span id="userPoints">0</span> نقطة</span>
+            <span><i class="fas fa-star"></i> <span id="userPoints">0</span> <span data-i18n="points-label">نقطة</span></span>
         </div>
     </div>
 </nav>
@@ -39,29 +43,147 @@
     <main>
         <section class="page-header">
             <div class="container">
-                <h2>الدروس التعليمية</h2>
-                <p>اختر الدرس المناسب لمستواك</p>
+                <h2 data-i18n="lessons-title">الدروس التعليمية</h2>
+                <p data-i18n="lessons-desc">اختر الدرس المناسب لمستواك</p>
             </div>
         </section>
 
         <section class="lessons-grid">
             <div class="container">
                 <div class="level-tabs">
-                    <button class="level-tab active" onclick="filterLessons('beginner')">مبتدئ</button>
-                    <button class="level-tab" onclick="filterLessons('intermediate')">متوسط</button>
-                    <button class="level-tab" onclick="filterLessons('advanced')">متقدم</button>
+                    <button class="level-tab active" onclick="filterLessons('beginner')" data-i18n="tab-beginner">مبتدئ</button>
+                    <button class="level-tab" onclick="filterLessons('intermediate')" data-i18n="tab-intermediate">متوسط</button>
+                    <button class="level-tab" onclick="filterLessons('advanced')" data-i18n="tab-advanced">متقدم</button>
                 </div>
 
                 <div class="lessons-container" id="lessonsContainer">
                     <!-- الدروس ستظهر هنا من خلال JavaScript -->
                 </div>
             </div>
+        <section class="keyboard-layout">
+            <div class="container">
+                <h2 class="section-title" data-i18n="keyboard-guide-title">تعلم وضع الأصابع الصحيح</h2>
+                <div class="keyboard-diagram">
+                    <!-- الصف الأول (الأرقام) -->
+                    <div class="keyboard-row row-1">
+                        <div class="key" style="border-top:2px solid #ef4444">`</div>
+                        <div class="key" style="border-top:2px solid #ef4444">1</div>
+                        <div class="key" style="border-top:2px solid #f97316">2</div>
+                        <div class="key" style="border-top:2px solid #eab308">3</div>
+                        <div class="key" style="border-top:2px solid #22c55e">4</div>
+                        <div class="key" style="border-top:2px solid #22c55e">5</div>
+                        <div class="key" style="border-top:2px solid #14b8a6">6</div>
+                        <div class="key" style="border-top:2px solid #14b8a6">7</div>
+                        <div class="key" style="border-top:2px solid #3b82f6">8</div>
+                        <div class="key" style="border-top:2px solid #8b5cf6">9</div>
+                        <div class="key" style="border-top:2px solid #ec4899">0</div>
+                        <div class="key" style="border-top:2px solid #ec4899">-</div>
+                        <div class="key" style="border-top:2px solid #ec4899">=</div>
+                        <div class="key wide-backspace" style="border-top:2px solid #ec4899" data-i18n="key-back">Back</div>
+                    </div>
+
+                    <!-- الصف الثاني -->
+                    <div class="keyboard-row row-2">
+                        <div class="key wide-tab" data-i18n="key-tab">Tab</div>
+                        <div class="key" style="border-top:2px solid #ef4444">q</div>
+                        <div class="key" style="border-top:2px solid #f97316">w</div>
+                        <div class="key" style="border-top:2px solid #eab308">e</div>
+                        <div class="key" style="border-top:2px solid #22c55e">r</div>
+                        <div class="key" style="border-top:2px solid #22c55e">t</div>
+                        <div class="key" style="border-top:2px solid #14b8a6">y</div>
+                        <div class="key" style="border-top:2px solid #14b8a6">u</div>
+                        <div class="key" style="border-top:2px solid #3b82f6">i</div>
+                        <div class="key" style="border-top:2px solid #8b5cf6">o</div>
+                        <div class="key" style="border-top:2px solid #ec4899">p</div>
+                        <div class="key" style="border-top:2px solid #ec4899">[</div>
+                        <div class="key" style="border-top:2px solid #ec4899">]</div>
+                        <div class="key" style="border-top:2px solid #ec4899">\</div>
+                    </div>
+
+                    <!-- الصف الثالث -->
+                    <div class="keyboard-row row-3">
+                        <div class="key wide-caps" data-i18n="key-caps">Caps</div>
+                        <div class="key" style="border-top:2px solid #ef4444">a</div>
+                        <div class="key" style="border-top:2px solid #f97316">s</div>
+                        <div class="key" style="border-top:2px solid #eab308">d</div>
+                        <div class="key" style="border-top:2px solid #22c55e; border-bottom:3px solid #a78bfa">f</div>
+                        <div class="key" style="border-top:2px solid #22c55e">g</div>
+                        <div class="key" style="border-top:2px solid #14b8a6">h</div>
+                        <div class="key" style="border-top:2px solid #14b8a6; border-bottom:3px solid #a78bfa">j</div>
+                        <div class="key" style="border-top:2px solid #3b82f6">k</div>
+                        <div class="key" style="border-top:2px solid #8b5cf6">l</div>
+                        <div class="key" style="border-top:2px solid #ec4899">;</div>
+                        <div class="key" style="border-top:2px solid #ec4899">'</div>
+                        <div class="key wide-enter" style="border-top:2px solid #ec4899" data-i18n="key-enter">Enter</div>
+                    </div>
+
+                    <!-- الصف الرابع -->
+                    <div class="keyboard-row row-4">
+                        <div class="key wide-shift" data-i18n="key-shift">Shift</div>
+                        <div class="key" style="border-top:2px solid #ef4444">z</div>
+                        <div class="key" style="border-top:2px solid #f97316">x</div>
+                        <div class="key" style="border-top:2px solid #eab308">c</div>
+                        <div class="key" style="border-top:2px solid #22c55e">v</div>
+                        <div class="key" style="border-top:2px solid #22c55e">b</div>
+                        <div class="key" style="border-top:2px solid #14b8a6">n</div>
+                        <div class="key" style="border-top:2px solid #14b8a6">m</div>
+                        <div class="key" style="border-top:2px solid #3b82f6">,</div>
+                        <div class="key" style="border-top:2px solid #8b5cf6">.</div>
+                        <div class="key" style="border-top:2px solid #ec4899">/</div>
+                        <div class="key wide-shift" data-i18n="key-shift">Shift</div>
+                    </div>
+
+                    <!-- الصف الخامس -->
+                    <div class="keyboard-row row-5">
+                        <div class="key wide-space" style="border-top:2px solid #6366f1" data-i18n="key-space">Space</div>
+                    </div>
+                </div>
+
+                <div class="finger-guide">
+                    <div class="guide-item">
+                        <span class="color-box" style="background:#ef4444"></span>
+                        <span data-i18n="finger-8">الخنصر</span>
+                    </div>
+                    <div class="guide-item">
+                        <span class="color-box" style="background:#f97316"></span>
+                        <span data-i18n="finger-7">البنصر</span>
+                    </div>
+                    <div class="guide-item">
+                        <span class="color-box" style="background:#eab308"></span>
+                        <span data-i18n="finger-6">الوسطى</span>
+                    </div>
+                    <div class="guide-item">
+                        <span class="color-box" style="background:#22c55e"></span>
+                        <span data-i18n="finger-5">السبابة (يسار)</span>
+                    </div>
+                    <div class="guide-item">
+                        <span class="color-box" style="background:#14b8a6"></span>
+                        <span data-i18n="finger-4">السبابة (يمين)</span>
+                    </div>
+                    <div class="guide-item">
+                        <span class="color-box" style="background:#3b82f6"></span>
+                        <span data-i18n="finger-3">الوسطى (ي)</span>
+                    </div>
+                    <div class="guide-item">
+                        <span class="color-box" style="background:#8b5cf6"></span>
+                        <span data-i18n="finger-2">البنصر (ي)</span>
+                    </div>
+                    <div class="guide-item">
+                        <span class="color-box" style="background:#ec4899"></span>
+                        <span data-i18n="finger-1">الخنصر (ي)</span>
+                    </div>
+                    <div class="guide-item">
+                        <span class="color-box" style="background:#a78bfa; width:18px; height:18px; border-radius:50%"></span>
+                        <span data-i18n="home-row-guide">صف الأساس (f و j)</span>
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
 
-    <footer>
+    <footer data-i18n="footer-rights">
         <div class="container">
-            <p>جميع الحقوق محفوظة &copy; 2024</p>
+            <p>جميع الحقوق محفوظة &copy; 2026 - موقع تعليم الكتابة السريعة</p>
         </div>
     </footer>
 
