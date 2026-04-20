@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تعلم البرمجة - LECO Keyboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="logo">
+                    <img src="img/SIU.png" alt=" LECO Keyboard" style="height: 40px; width: auto; margin-left: 10px;">
+                    <span>LECO Keyboard</span>
+                </div>
+                <button class="menu-toggle" id="mobile-menu-toggle" aria-label="فتح القائمة">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <ul class="nav-menu">
+                    <li><a href="index.html" id="nav-home" data-i18n="nav-home">الرئيسية</a></li>
+                    <li><a href="lessons.html" id="nav-lessons" data-i18n="nav-lessons">الدروس</a></li>
+                    <li><a href="exercises.html" id="nav-exercises" data-i18n="nav-exercises">تمارين تفاعلية</a></li>
+                    <li><a href="progress.html" id="nav-progress" data-i18n="nav-progress">تقدمي</a></li>
+                    <li><a href="programming.html" id="nav-programming" data-i18n="nav-programming" class="active">تعلم البرمجة</a></li>
+                    <li><a href="about.html" id="nav-about" data-i18n="nav-about">عن الموقع</a></li>
+                </ul>
+                <div class="language-selector">
+                    <button id="languageToggle" class="lang-toggle-btn">
+                        <i class="fas fa-globe"></i>
+                        <span id="currentLangText">العربية</span>
+                    </button>
+                </div>
+                <div class="user-stats" id="userStats">
+                    <span><i class="fas fa-star"></i> <span id="userPoints">0</span> <span data-i18n="points-label">نقطة</span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <h2 data-i18n="prog-hero-title">ابدأ تعلم البرمجة</h2>
+                <p data-i18n="prog-hero-desc">اختر لغة وابدأ رحلتك التعليمية اليوم</p>
+                <a href="#categories" class="btn" data-i18n="prog-explore-btn">استكشف الدورات</a>
+            </div>
+        </section>
+
+        <section id="categories" class="features">
+            <div class="container">
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fab fa-html5"></i></div>
+                        <h3>HTML</h3>
+                        <p data-i18n="prog-cat-html-desc">لغة هيكلة صفحات الويب الأساسية</p>
+                        <a href="https://www.w3schools.com/html/" target="_blank" rel="noopener noreferrer" class="btn" style="margin-top:20px; width:100%" data-i18n="prog-start-btn">ابدأ التعلم</a>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fab fa-css3-alt"></i></div>
+                        <h3>CSS</h3>
+                        <p data-i18n="prog-cat-css-desc">لغة تنسيق وتصميم صفحات الويب بشكل احترافي</p>
+                        <a href="https://www.w3schools.com/css/" target="_blank" rel="noopener noreferrer" class="btn" style="margin-top:20px; width:100%" data-i18n="prog-start-btn">ابدأ التعلم</a>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fab fa-js"></i></div>
+                        <h3>JavaScript</h3>
+                        <p data-i18n="prog-cat-js-desc">لغة البرمجة لجعل الصفحات تفاعلية وديناميكية</p>
+                        <a href="https://www.w3schools.com/js/" target="_blank" rel="noopener noreferrer" class="btn" style="margin-top:20px; width:100%" data-i18n="prog-start-btn">ابدأ التعلم</a>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fab fa-python"></i></div>
+                        <h3>Python</h3>
+                        <p data-i18n="prog-cat-py-desc">لغة برمجة قوية وسهلة التعلم لكافة الاستخدامات</p>
+                        <a href="https://www.w3schools.com/python/" target="_blank" rel="noopener noreferrer" class="btn" style="margin-top:20px; width:100%" data-i18n="prog-start-btn">ابدأ التعلم</a>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-code"></i></div>
+                        <h3>C++</h3>
+                        <p data-i18n="prog-cat-cpp-desc">لغة برمجة قوية تستخدم في بناء الأنظمة والألعاب</p>
+                        <a href="https://www.w3schools.com/cpp/" target="_blank" rel="noopener noreferrer" class="btn" style="margin-top:20px; width:100%" data-i18n="prog-start-btn">ابدأ التعلم</a>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fab fa-php"></i></div>
+                        <h3>PHP</h3>
+                        <p data-i18n="prog-cat-php-desc">لغة برمجة نصية لتطوير مواقع الويب من جانب الخادم</p>
+                        <a href="https://www.w3schools.com/php/" target="_blank" rel="noopener noreferrer" class="btn" style="margin-top:20px; width:100%" data-i18n="prog-start-btn">ابدأ التعلم</a>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fab fa-java"></i></div>
+                        <h3>Java</h3>
+                        <p data-i18n="prog-cat-java-desc">لغة برمجة قوية لتطبيقات الأندرويد والبرمجيات الكبيرة</p>
+                        <a href="https://www.w3schools.com/java/" target="_blank" rel="noopener noreferrer" class="btn" style="margin-top:20px; width:100%" data-i18n="prog-start-btn">ابدأ التعلم</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features" style="background: var(--bg-surface); border-top: 1px solid var(--border)">
+            <div class="container">
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-child"></i>
+                        <h3 data-i18n="prog-feat-1-title">مناسب للمبتدئين</h3>
+                        <p data-i18n="prog-feat-1-desc">دروس مشروحة بأسلوب مبسط وشامل</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-gift"></i>
+                        <h3 data-i18n="prog-feat-2-title">مصادر مجانية</h3>
+                        <p data-i18n="prog-feat-2-desc">وصول كامل لأفضل المصادر التعليمية العالمية</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-stairs"></i>
+                        <h3 data-i18n="prog-feat-3-title">دروس متدرجة</h3>
+                        <p data-i18n="prog-feat-3-desc">تعلم خطوة بخطوة من الصفر حتى الاحتراف</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer data-i18n="footer-rights">
+        <div class="container">
+            <p>جميع الحقوق محفوظة &copy; 2026 - موقع تعليم الكتابة السريعة</p>
+        </div>
+    </footer>
+
+    <script src="typing.js"></script>
+</body>
+</html>
