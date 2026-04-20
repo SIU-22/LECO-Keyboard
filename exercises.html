@@ -16,21 +16,25 @@
             <img src="img/SIU.png" alt=" LECO Keyboard" style="height: 40px; width: auto; margin-left: 10px;">
               <span>LECO Keyboard</span>
         </div>
+        <button class="menu-toggle" id="mobile-menu-toggle" aria-label="فتح القائمة">
+            <i class="fas fa-bars"></i>
+        </button>
         <ul class="nav-menu">
-            <li><a href="index.html" id="nav-home">الرئيسية</a></li>
-            <li><a href="lessons.html" id="nav-lessons">الدروس</a></li>
-            <li><a href="exercises.html" id="nav-exercises">تمارين تفاعلية</a></li>
-            <li><a href="progress.html" id="nav-progress">تقدمي</a></li>
-            <li><a href="about.html" id="nav-about">عن الموقع</a></li>
+            <li><a href="index.html" id="nav-home" data-i18n="nav-home">الرئيسية</a></li>
+            <li><a href="lessons.html" id="nav-lessons" data-i18n="nav-lessons">الدروس</a></li>
+            <li><a href="exercises.html" id="nav-exercises" data-i18n="nav-exercises" class="active">تمارين تفاعلية</a></li>
+            <li><a href="progress.html" id="nav-progress" data-i18n="nav-progress">تقدمي</a></li>
+            <li><a href="programming.html" id="nav-programming" data-i18n="nav-programming">تعلم البرمجة</a></li>
+            <li><a href="about.html" id="nav-about" data-i18n="nav-about">عن الموقع</a></li>
         </ul>
         <div class="language-selector">
-            <select id="languageSelect" class="lang-select">
-                <option value="arabic">العربية</option>
-                <option value="english">English</option>
-            </select>
+            <button id="languageToggle" class="lang-toggle-btn">
+                <i class="fas fa-globe"></i>
+                <span id="currentLangText">العربية</span>
+            </button>
         </div>
         <div class="user-stats" id="userStats">
-            <span><i class="fas fa-star"></i> <span id="userPoints">0</span> نقطة</span>
+            <span><i class="fas fa-star"></i> <span id="userPoints">0</span> <span data-i18n="points-label">نقطة</span></span>
         </div>
     </div>
 </nav>
@@ -39,27 +43,27 @@
     <main>
         <section class="page-header">
             <div class="container">
-                <h2>تمارين تفاعلية</h2>
-                <p>تدرب على الكتابة مع ألعاب وتحديات ممتعة</p>
+                <h2 data-i18n="exercise-page-title">تمارين تفاعلية</h2>
+                <p data-i18n="exercise-page-desc">تدرب على الكتابة مع ألعاب وتحديات ممتعة</p>
             </div>
         </section>
 
         <section class="typing-exercise">
             <div class="container">
                 <div class="exercise-header">
-                    <h3>تمرين الكتابة الحرة</h3>
+                    <h3 data-i18n="exercise-free-title">تمرين الكتابة الحرة</h3>
                     <div class="exercise-controls">
                         <select id="difficulty">
-                            <option value="easy">سهل</option>
-                            <option value="medium">متوسط</option>
-                            <option value="hard">صعب</option>
+                            <option value="easy" data-i18n="opt-easy">سهل</option>
+                            <option value="medium" data-i18n="opt-medium">متوسط</option>
+                            <option value="hard" data-i18n="opt-hard">صعب</option>
                         </select>
                         <select id="timeLimit">
-                            <option value="60">60 ثانية</option>
-                            <option value="120">دقيقتان</option>
-                            <option value="300">5 دقائق</option>
+                            <option value="60" data-i18n="unit-60s">60 ثانية</option>
+                            <option value="120" data-i18n="unit-2m">دقيقتان</option>
+                            <option value="300" data-i18n="unit-5m">5 دقائق</option>
                         </select>
-                        <button class="btn" onclick="startTypingExercise()">ابدأ التمرين</button>
+                        <button class="btn" onclick="startTypingExercise()" data-i18n="btn-start-exercise">ابدأ التمرين</button>
                     </div>
                 </div>
 
@@ -69,22 +73,22 @@
                     
                     <div class="exercise-stats">
                         <div class="stat-box">
-                            <span class="stat-label">السرعة</span>
+                            <span class="stat-label" data-i18n="speed-label">السرعة</span>
                             <span class="stat-value" id="currentSpeed">0</span>
-                            <span class="stat-unit">ك/د</span>
+                            <span class="stat-unit" data-i18n="unit-wpm">ك/د</span>
                         </div>
                         <div class="stat-box">
-                            <span class="stat-label">الدقة</span>
+                            <span class="stat-label" data-i18n="accuracy-label">الدقة</span>
                             <span class="stat-value" id="currentAccuracy">100</span>
                             <span class="stat-unit">%</span>
                         </div>
                         <div class="stat-box">
-                            <span class="stat-label">الوقت المتبقي</span>
+                            <span class="stat-label" data-i18n="label-remaining-time">الوقت المتبقي</span>
                             <span class="stat-value" id="timeLeft">60</span>
-                            <span class="stat-unit">ث</span>
+                            <span class="stat-unit" data-i18n="unit-seconds">ث</span>
                         </div>
                         <div class="stat-box">
-                            <span class="stat-label">الأخطاء</span>
+                            <span class="stat-label" data-i18n="label-errors">الأخطاء</span>
                             <span class="stat-value" id="errors">0</span>
                         </div>
                     </div>
@@ -128,7 +132,7 @@
 
     <footer>
         <div class="container">
-            <p>جميع الحقوق محفوظة &copy; 2024</p>
+            <p>جميع الحقوق محفوظة &copy; 2026</p>
         </div>
     </footer>
 
