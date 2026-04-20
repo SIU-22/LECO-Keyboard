@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,50 +9,62 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
+
 <body>
     <header>
-       <nav class="navbar">
-    <div class="container">
-        <div class="logo">
-            <img src="img/SIU.png" alt=" LECO Keyboard" style="height: 40px; width: auto; margin-left: 10px;">
-            <span>LECO Keyboard</span>
-        </div>
-        <ul class="nav-menu">
-            <li><a href="index.html" id="nav-home">الرئيسية</a></li>
-            <li><a href="lessons.html" id="nav-lessons">الدروس</a></li>
-            <li><a href="exercises.html" id="nav-exercises">تمارين تفاعلية</a></li>
-            <li><a href="progress.html" id="nav-progress">تقدمي</a></li>
-            <li><a href="about.html" id="nav-about">عن الموقع</a></li>
-        </ul>
-        <div class="language-selector">
-            <select id="languageSelect" class="lang-select">
-                <option value="arabic">العربية</option>
-                <option value="english">English</option>
-            </select>
-        </div>
-        <div class="user-stats" id="userStats">
-            <span><i class="fas fa-star"></i> <span id="userPoints">0</span> نقطة</span>
-        </div>
-    </div>
-</nav>
+        <nav class="navbar">
+            <div class="container">
+                <div class="logo">
+                    <img src="img/SIU.png" alt=" LECO Keyboard" style="height: 40px; width: auto; margin-left: 10px;">
+                    <span>LECO Keyboard</span>
+                </div>
+                <button class="menu-toggle" id="mobile-menu-toggle" aria-label="فتح القائمة">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <ul class="nav-menu">
+                    <li><a href="index.html" id="nav-home" data-i18n="nav-home" class="active">الرئيسية</a></li>
+                    <li><a href="lessons.html" id="nav-lessons" data-i18n="nav-lessons">الدروس</a></li>
+                    <li><a href="exercises.html" id="nav-exercises" data-i18n="nav-exercises">تمارين تفاعلية</a></li>
+                    <li><a href="progress.html" id="nav-progress" data-i18n="nav-progress">تقدمي</a></li>
+                    <li><a href="programming.html" id="nav-programming" data-i18n="nav-programming">تعلم البرمجة</a>
+                    </li>
+                    <li><a href="about.html" id="nav-about" data-i18n="nav-about">عن الموقع</a></li>
+                </ul>
+                <div class="language-selector">
+                    <button id="languageToggle" class="lang-toggle-btn">
+                        <i class="fas fa-globe"></i>
+                        <span id="currentLangText">العربية</span>
+                    </button>
+                </div>
+                <div class="user-stats" id="userStats">
+                    <span><i class="fas fa-star"></i> <span id="userPoints">0</span> <span
+                            data-i18n="points-label">نقطة</span></span>
+                </div>
+            </div>
+        </nav>
     </header>
 
     <main>
         <section class="hero typing-hero">
             <div class="container">
-                <h2>أتقن الكتابة السريعة على الكيبورد</h2>
-                <p>تعلم الكتابة بسرعة 60 كلمة في الدقيقة مع تمارين تفاعلية وممتعة</p>
+                <h2 data-i18n="hero-title">أتقن الكتابة السريعة على الكيبورد</h2>
+                <p data-i18n="hero-desc">تعلم الكتابة بسرعة 60 كلمة في الدقيقة مع تمارين تفاعلية وممتعة</p>
                 <div class="typing-speed-test">
-                    <h3>اختبر سرعتك الآن</h3>
+                    <h3 data-i18n="speed-test-title">اختبر سرعتك الآن</h3>
                     <div class="test-container">
-                        <p class="test-text" id="testText">مرحبا بكم في موقع تعليم الكتابة السريعة</p>
-                        <input type="text" id="userInput" placeholder="ابدأ الكتابة هنا..." disabled>
+                        <p class="test-text" id="testText" data-i18n="test-text-default">مرحبا بكم في موقع تعليم الكتابة
+                            السريعة</p>
+                        <input type="text" id="userInput" data-i18n="input-placeholder"
+                            placeholder="ابدأ الكتابة هنا..." disabled>
                         <div class="test-stats">
-                            <span><i class="fas fa-clock"></i> الوقت: <span id="timer">0</span> ثانية</span>
-                            <span><i class="fas fa-tachometer-alt"></i> السرعة: <span id="speed">0</span> ك/د</span>
-                            <span><i class="fas fa-check-circle"></i> الدقة: <span id="accuracy">0</span>%</span>
+                            <span><i class="fas fa-clock"></i> <span data-i18n="timer-label">الوقت</span>: <span
+                                    id="timer">0</span> <span data-i18n="unit-seconds">ثانية</span></span>
+                            <span><i class="fas fa-tachometer-alt"></i> <span data-i18n="speed-label">السرعة</span>:
+                                <span id="speed">0</span> <span data-i18n="unit-wpm">ك/د</span></span>
+                            <span><i class="fas fa-check-circle"></i> <span data-i18n="accuracy-label">الدقة</span>:
+                                <span id="accuracy">0</span>%</span>
                         </div>
-                        <button class="btn" id="startTest">ابدأ الاختبار</button>
+                        <button class="btn" id="startTest" data-i18n="start-btn">ابدأ الاختبار</button>
                     </div>
                 </div>
             </div>
@@ -59,132 +72,166 @@
 
         <section class="features">
             <div class="container">
-                <h2 class="section-title">لماذا تتعلم معنا؟</h2>
+                <h2 class="section-title" data-i18n="why-us">لماذا تتعلم معنا؟</h2>
                 <div class="features-grid">
                     <div class="feature-card">
                         <i class="fas fa-graduation-cap"></i>
-                        <h3>دروس منظمة</h3>
-                        <p>منهج متكامل من المبتدئين حتى الاحتراف</p>
+                        <h3 data-i18n="feature-1-title">دروس منظمة</h3>
+                        <p data-i18n="feature-1-desc">منهج متكامل من المبتدئين حتى الاحتراف</p>
                     </div>
                     <div class="feature-card">
                         <i class="fas fa-gamepad"></i>
-                        <h3>تمارين تفاعلية</h3>
-                        <p>ألعاب وتمارين ممتعة لتحسين سرعتك</p>
+                        <h3 data-i18n="feature-2-title">تمارين تفاعلية</h3>
+                        <p data-i18n="feature-2-desc">ألعاب وتمارين ممتعة لتحسين سرعتك</p>
                     </div>
                     <div class="feature-card">
                         <i class="fas fa-chart-line"></i>
-                        <h3>تتبع التقدم</h3>
-                        <p>إحصائيات مفصلة عن تطور مستواك</p>
+                        <h3 data-i18n="feature-3-title">تتبع التقدم</h3>
+                        <p data-i18n="feature-3-desc">إحصائيات مفصلة عن تطور مستواك</p>
                     </div>
                     <div class="feature-card">
                         <i class="fas fa-trophy"></i>
-                        <h3>شهادات إنجاز</h3>
-                        <p>احصل على شهادات عند إتمام المستويات</p>
+                        <h3 data-i18n="feature-4-title">شهادات إنجاز</h3>
+                        <p data-i18n="feature-4-desc">احصل على شهادات عند إتمام المستويات</p>
                     </div>
                 </div>
             </div>
         </section>
 
-       <section class="keyboard-layout">
-    <div class="container">
-        <h2 class="section-title">تعلم وضع الأصابع الصحيح</h2>
-        <div class="keyboard-diagram">
-            <!-- الصف الأول (الأرقام) -->
-            <div class="keyboard-row">
-                <div class="key" style="background: #f56565;">1</div>
-                <div class="key" style="background: #f56565;">2</div>
-                <div class="key" style="background: #ed8936;">3</div>
-                <div class="key" style="background: #ed8936;">4</div>
-                <div class="key" style="background: #48bb78;">5</div>
-                <div class="key" style="background: #48bb78;">6</div>
-                <div class="key" style="background: #4299e1;">7</div>
-                <div class="key" style="background: #4299e1;">8</div>
-                <div class="key" style="background: #9f7aea;">9</div>
-                <div class="key" style="background: #9f7aea;">0</div>
-                <div class="key" style="background: #f56565;">-</div>
-                <div class="key" style="background: #f56565;">=</div>
+        <section class="keyboard-layout">
+            <div class="container">
+                <h2 class="section-title">تعلم وضع الأصابع الصحيح</h2>
+                <div class="keyboard-diagram">
+                    <!-- الصف الأول (الأرقام) -->
+                    <div class="keyboard-row row-1">
+                        <div class="key" style="border-top:2px solid #ef4444">`</div>
+                        <div class="key" style="border-top:2px solid #ef4444">1</div>
+                        <div class="key" style="border-top:2px solid #f97316">2</div>
+                        <div class="key" style="border-top:2px solid #eab308">3</div>
+                        <div class="key" style="border-top:2px solid #22c55e">4</div>
+                        <div class="key" style="border-top:2px solid #22c55e">5</div>
+                        <div class="key" style="border-top:2px solid #14b8a6">6</div>
+                        <div class="key" style="border-top:2px solid #14b8a6">7</div>
+                        <div class="key" style="border-top:2px solid #3b82f6">8</div>
+                        <div class="key" style="border-top:2px solid #8b5cf6">9</div>
+                        <div class="key" style="border-top:2px solid #ec4899">0</div>
+                        <div class="key" style="border-top:2px solid #ec4899">-</div>
+                        <div class="key" style="border-top:2px solid #ec4899">=</div>
+                        <div class="key wide-backspace" style="border-top:2px solid #ec4899" data-i18n="key-back">Back
+                        </div>
+                    </div>
+
+                    <!-- الصف الثاني (QWERTY) -->
+                    <div class="keyboard-row row-2">
+                        <div class="key wide-tab" data-i18n="key-tab">Tab</div>
+                        <div class="key" style="border-top:2px solid #ef4444">q</div>
+                        <div class="key" style="border-top:2px solid #f97316">w</div>
+                        <div class="key" style="border-top:2px solid #eab308">e</div>
+                        <div class="key" style="border-top:2px solid #22c55e">r</div>
+                        <div class="key" style="border-top:2px solid #22c55e">t</div>
+                        <div class="key" style="border-top:2px solid #14b8a6">y</div>
+                        <div class="key" style="border-top:2px solid #14b8a6">u</div>
+                        <div class="key" style="border-top:2px solid #3b82f6">i</div>
+                        <div class="key" style="border-top:2px solid #8b5cf6">o</div>
+                        <div class="key" style="border-top:2px solid #ec4899">p</div>
+                        <div class="key" style="border-top:2px solid #ec4899">[</div>
+                        <div class="key" style="border-top:2px solid #ec4899">]</div>
+                        <div class="key" style="border-top:2px solid #ec4899">\</div>
+                    </div>
+
+                    <!-- الصف الثالث (ASDF) - الصف الأساسي -->
+                    <div class="keyboard-row row-3">
+                        <div class="key wide-caps" data-i18n="key-caps">Caps</div>
+                        <div class="key" style="border-top:2px solid #ef4444">a</div>
+                        <div class="key" style="border-top:2px solid #f97316">s</div>
+                        <div class="key" style="border-top:2px solid #eab308">d</div>
+                        <div class="key" style="border-top:2px solid #22c55e; border-bottom:3px solid #a78bfa">f</div>
+                        <div class="key" style="border-top:2px solid #22c55e">g</div>
+                        <div class="key" style="border-top:2px solid #14b8a6">h</div>
+                        <div class="key" style="border-top:2px solid #14b8a6; border-bottom:3px solid #a78bfa">j</div>
+                        <div class="key" style="border-top:2px solid #3b82f6">k</div>
+                        <div class="key" style="border-top:2px solid #8b5cf6">l</div>
+                        <div class="key" style="border-top:2px solid #ec4899">;</div>
+                        <div class="key" style="border-top:2px solid #ec4899">'</div>
+                        <div class="key wide-enter" style="border-top:2px solid #ec4899" data-i18n="key-enter">Enter
+                        </div>
+                    </div>
+
+                    <!-- الصف الرابع (ZXCV) -->
+                    <div class="keyboard-row row-4">
+                        <div class="key wide-shift" data-i18n="key-shift">Shift</div>
+                        <div class="key" style="border-top:2px solid #ef4444">z</div>
+                        <div class="key" style="border-top:2px solid #f97316">x</div>
+                        <div class="key" style="border-top:2px solid #eab308">c</div>
+                        <div class="key" style="border-top:2px solid #22c55e">v</div>
+                        <div class="key" style="border-top:2px solid #22c55e">b</div>
+                        <div class="key" style="border-top:2px solid #14b8a6">n</div>
+                        <div class="key" style="border-top:2px solid #14b8a6">m</div>
+                        <div class="key" style="border-top:2px solid #3b82f6">,</div>
+                        <div class="key" style="border-top:2px solid #8b5cf6">.</div>
+                        <div class="key" style="border-top:2px solid #ec4899">/</div>
+                        <div class="key wide-shift" data-i18n="key-shift">Shift</div>
+                    </div>
+
+                    <!-- الصف الخامس (Space) -->
+                    <div class="keyboard-row row-5">
+                        <div class="key wide-space" style="border-top:2px solid #6366f1" data-i18n="key-space">Space
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="finger-guide">
+                    <div class="guide-item">
+                        <span class="color-box" style="background:#ef4444"></span>
+                        <span data-i18n="finger-8">الخنصر</span>
+                    </div>
+                    <div class="guide-item">
+                        <span class="color-box" style="background:#f97316"></span>
+                        <span data-i18n="finger-7">البنصر</span>
+                    </div>
+                    <div class="guide-item">
+                        <span class="color-box" style="background:#eab308"></span>
+                        <span data-i18n="finger-6">الوسطى</span>
+                    </div>
+                    <div class="guide-item">
+                        <span class="color-box" style="background:#22c55e"></span>
+                        <span data-i18n="finger-5">السبابة (يسار)</span>
+                    </div>
+                    <div class="guide-item">
+                        <span class="color-box" style="background:#14b8a6"></span>
+                        <span data-i18n="finger-4">السبابة (يمين)</span>
+                    </div>
+                    <div class="guide-item">
+                        <span class="color-box" style="background:#3b82f6"></span>
+                        <span data-i18n="finger-3">الوسطى (ي)</span>
+                    </div>
+                    <div class="guide-item">
+                        <span class="color-box" style="background:#8b5cf6"></span>
+                        <span data-i18n="finger-2">البنصر (ي)</span>
+                    </div>
+                    <div class="guide-item">
+                        <span class="color-box" style="background:#ec4899"></span>
+                        <span data-i18n="finger-1">الخنصر (ي)</span>
+                    </div>
+                    <div class="guide-item">
+                        <span class="color-box"
+                            style="background:#a78bfa; width:18px; height:18px; border-radius:50%"></span>
+                        <span data-i18n="home-row-guide">صف الأساس (f و j)</span>
+                    </div>
+                </div>
             </div>
-            
-            <!-- الصف الثاني (QWERTY) -->
-            <div class="keyboard-row">
-                <div class="key" style="background: #f56565;">q</div>
-                <div class="key" style="background: #f56565;">w</div>
-                <div class="key" style="background: #ed8936;">e</div>
-                <div class="key" style="background: #ed8936;">r</div>
-                <div class="key" style="background: #48bb78;">t</div>
-                <div class="key" style="background: #48bb78;">y</div>
-                <div class="key" style="background: #4299e1;">u</div>
-                <div class="key" style="background: #4299e1;">i</div>
-                <div class="key" style="background: #9f7aea;">o</div>
-                <div class="key" style="background: #9f7aea;">p</div>
-                <div class="key" style="background: #f56565;">[</div>
-                <div class="key" style="background: #f56565;">]</div>
-                <div class="key" style="background: #f56565;">\</div>
-            </div>
-            
-            <!-- الصف الثالث (ASDF) -->
-            <div class="keyboard-row">
-                <div class="key" style="background: #f56565;">a</div>
-                <div class="key" style="background: #f56565;">s</div>
-                <div class="key" style="background: #ed8936;">d</div>
-                <div class="key" style="background: #ed8936;">f</div>
-                <div class="key" style="background: #48bb78;">g</div>
-                <div class="key" style="background: #48bb78;">h</div>
-                <div class="key" style="background: #4299e1;">j</div>
-                <div class="key" style="background: #4299e1;">k</div>
-                <div class="key" style="background: #9f7aea;">l</div>
-                <div class="key" style="background: #9f7aea;">;</div>
-                <div class="key" style="background: #f56565;">'</div>
-            </div>
-            
-            <!-- الصف الرابع (ZXCV) -->
-            <div class="keyboard-row">
-                <div class="key" style="background: #f56565;">z</div>
-                <div class="key" style="background: #f56565;">x</div>
-                <div class="key" style="background: #ed8936;">c</div>
-                <div class="key" style="background: #ed8936;">v</div>
-                <div class="key" style="background: #48bb78;">b</div>
-                <div class="key" style="background: #48bb78;">n</div>
-                <div class="key" style="background: #4299e1;">m</div>
-                <div class="key" style="background: #4299e1;">,</div>
-                <div class="key" style="background: #9f7aea;">.</div>
-                <div class="key" style="background: #9f7aea;">/</div>
-            </div>
-        </div>
-        
-        <!-- دليل الألوان -->
-        <div class="finger-guide">
-            <div class="guide-item">
-                <span class="color-box" style="background: #f56565;"></span>
-                <span>الخنصر</span>
-            </div>
-            <div class="guide-item">
-                <span class="color-box" style="background: #ed8936;"></span>
-                <span>البنصر</span>
-            </div>
-            <div class="guide-item">
-                <span class="color-box" style="background: #48bb78;"></span>
-                <span>الوسطى</span>
-            </div>
-            <div class="guide-item">
-                <span class="color-box" style="background: #4299e1;"></span>
-                <span>السبابة (يسار)</span>
-            </div>
-            <div class="guide-item">
-                <span class="color-box" style="background: #9f7aea;"></span>
-                <span>السبابة (يمين)</span>
-            </div>
-        </div>
-    </div>
-       </section>
+        </section>
     </main>
 
-    <footer>
+    <footer data-i18n="footer-rights">
         <div class="container">
-            <p>جميع الحقوق محفوظة &copy; 2024 - موقع تعليم الكتابة السريعة</p>
+            <p>جميع الحقوق محفوظة &copy; 2026 - موقع تعليم الكتابة السريعة</p>
         </div>
     </footer>
 
     <script src="typing.js"></script>
+    <script type="module" src="auth.js"></script>
 </body>
+
 </html>
