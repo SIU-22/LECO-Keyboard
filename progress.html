@@ -17,21 +17,25 @@
             <img src="img/SIU.png" alt=" LECO Keyboard" style="height: 40px; width: auto; margin-left: 10px;">
             <span>LECO Keyboard</span>
         </div>
+        <button class="menu-toggle" id="mobile-menu-toggle" aria-label="فتح القائمة">
+            <i class="fas fa-bars"></i>
+        </button>
         <ul class="nav-menu">
-            <li><a href="index.html" id="nav-home">الرئيسية</a></li>
-            <li><a href="lessons.html" id="nav-lessons">الدروس</a></li>
-            <li><a href="exercises.html" id="nav-exercises">تمارين تفاعلية</a></li>
-            <li><a href="progress.html" id="nav-progress">تقدمي</a></li>
-            <li><a href="about.html" id="nav-about">عن الموقع</a></li>
+            <li><a href="index.html" id="nav-home" data-i18n="nav-home">الرئيسية</a></li>
+            <li><a href="lessons.html" id="nav-lessons" data-i18n="nav-lessons">الدروس</a></li>
+            <li><a href="exercises.html" id="nav-exercises" data-i18n="nav-exercises">تمارين تفاعلية</a></li>
+            <li><a href="progress.html" id="nav-progress" data-i18n="nav-progress" class="active">تقدمي</a></li>
+            <li><a href="programming.html" id="nav-programming" data-i18n="nav-programming">تعلم البرمجة</a></li>
+            <li><a href="about.html" id="nav-about" data-i18n="nav-about">عن الموقع</a></li>
         </ul>
         <div class="language-selector">
-            <select id="languageSelect" class="lang-select">
-                <option value="arabic">العربية</option>
-                <option value="english">English</option>
-            </select>
+            <button id="languageToggle" class="lang-toggle-btn">
+                <i class="fas fa-globe"></i>
+                <span id="currentLangText">العربية</span>
+            </button>
         </div>
         <div class="user-stats" id="userStats">
-            <span><i class="fas fa-star"></i> <span id="userPoints">0</span> نقطة</span>
+            <span><i class="fas fa-star"></i> <span id="userPoints">0</span> <span data-i18n="points-label">نقطة</span></span>
         </div>
     </div>
 </nav>
@@ -40,8 +44,8 @@
     <main>
         <section class="page-header">
             <div class="container">
-                <h2>تتبع تقدمك</h2>
-                <p>إحصائيات مفصلة عن تطور مستواك</p>
+                <h2 data-i18n="progress-title">تتبع تقدمك</h2>
+                <p data-i18n="progress-desc">إحصائيات مفصلة عن تطور مستواك</p>
             </div>
         </section>
 
@@ -51,49 +55,55 @@
                     <div class="stat-card">
                         <i class="fas fa-tachometer-alt"></i>
                         <div class="stat-info">
-                            <span class="stat-title">متوسط السرعة</span>
-                            <span class="stat-number" id="avgSpeed">45</span>
-                            <span class="stat-unit">كلمة/دقيقة</span>
+                            <span class="stat-title" data-i18n="stat-avg-speed">متوسط السرعة</span>
+                            <span class="stat-number" id="avgSpeed">0</span>
+                            <span class="stat-unit" data-i18n="unit-wpm">كلمة/دقيقة</span>
+                            <div class="speed-comparison" style="height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 10px; overflow: hidden;">
+                                <div id="speedBar" style="height: 100%; width: 0%; background: var(--primary); transition: width 0.5s ease;"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="stat-card">
                         <i class="fas fa-check-double"></i>
                         <div class="stat-info">
-                            <span class="stat-title">الدقة</span>
-                            <span class="stat-number" id="avgAccuracy">92</span>
+                            <span class="stat-title" data-i18n="stat-avg-accuracy">الدقة</span>
+                            <span class="stat-number" id="avgAccuracy">0</span>
                             <span class="stat-unit">%</span>
+                            <div class="accuracy-bar">
+                                <div id="accuracyFill" class="accuracy-fill" style="width: 0%"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="stat-card">
                         <i class="fas fa-clock"></i>
                         <div class="stat-info">
-                            <span class="stat-title">وقت التدريب</span>
-                            <span class="stat-number" id="totalTime">15.5</span>
-                            <span class="stat-unit">ساعة</span>
+                            <span class="stat-title" data-i18n="stat-training-time">وقت التدريب</span>
+                            <span class="stat-number" id="totalTime">0</span>
+                            <span class="stat-unit" data-i18n="stat-unit-time">ساعة</span>
                         </div>
                     </div>
                     <div class="stat-card">
                         <i class="fas fa-trophy"></i>
                         <div class="stat-info">
-                            <span class="stat-title">المستوى</span>
-                            <span class="stat-number" id="userLevel">متوسط</span>
+                            <span class="stat-title" data-i18n="stat-level">المستوى</span>
+                            <span class="stat-number" id="userLevel">0</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="progress-charts">
                     <div class="chart-container">
-                        <h3>تطور السرعة</h3>
+                        <h3 data-i18n="chart-speed-title">تطور السرعة</h3>
                         <canvas id="speedChart"></canvas>
                     </div>
                     <div class="chart-container">
-                        <h3>تطور الدقة</h3>
+                        <h3 data-i18n="chart-accuracy-title">تطور الدقة</h3>
                         <canvas id="accuracyChart"></canvas>
                     </div>
                 </div>
 
                 <div class="achievements">
-                    <h3>الإنجازات</h3>
+                    <h3 data-i18n="achievements-title">الإنجازات</h3>
                     <div class="achievements-grid" id="achievementsList">
                         <!-- الإنجازات ستظهر هنا -->
                     </div>
@@ -105,13 +115,18 @@
                         <!-- الشارات ستظهر هنا -->
                     </div>
                 </div>
+                <div class="danger-zone" style="margin-top: 50px; padding: 20px; border: 1px solid var(--danger); border-radius: var(--radius-md); text-align: center;">
+                    <h3 style="color: var(--danger); margin-bottom: 10px;">منطقة الخطر</h3>
+                    <p style="margin-bottom: 20px;">حذف كافة البيانات والتقدم الخاص بك بشكل نهائي</p>
+                    <button class="btn btn-danger" onclick="resetProgress()" style="background: var(--danger);">إعادة تعيين كافة البيانات</button>
+                </div>
             </div>
         </section>
     </main>
 
     <footer>
         <div class="container">
-            <p>جميع الحقوق محفوظة &copy; 2024</p>
+            <p>جميع الحقوق محفوظة &copy; 2026</p>
         </div>
     </footer>
 
