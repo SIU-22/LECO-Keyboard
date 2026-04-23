@@ -548,6 +548,7 @@ body::after {
     display: flex;
     flex-direction: column;
     align-items: center;
+    direction: ltr !important;
 }
 
 /* Virtual Keyboard (Interactive) */
@@ -560,6 +561,7 @@ body::after {
     display: flex;
     flex-direction: column;
     align-items: center;
+    direction: ltr !important;
 }
 
 .virtual-keyboard:empty, .keyboard-diagram:empty {
@@ -1485,9 +1487,7 @@ footer a:hover { text-decoration: underline; }
     .key.wide-backspace { width: 88px; }
     .key.wide-enter { width: 88px; }
     .key.wide-space { width: 300px; }
-    .row-2 { padding-left: 28px; }
-    .row-3 { padding-left: 44px; }
-    .row-4 { padding-left: 58px; }
+    .row-1, .row-2, .row-3, .row-4 { padding-left: 0 !important; }
 
 
 }
@@ -1502,11 +1502,8 @@ footer a:hover { text-decoration: underline; }
         border-radius: 4px;
         box-shadow: 0 2px 0 #070b14, inset 0 1px 0 rgba(255,255,255,0.05);
     }
-    .keyboard-row { gap: 3px; }
-    .row-1 { padding-left: 6px; }
-    .row-2 { padding-left: 16px; }
-    .row-3 { padding-left: 24px; }
-    .row-4 { padding-left: 32px; }
+    .keyboard-row { gap: 3px; padding-left: 0 !important; }
+    .row-1, .row-2, .row-3, .row-4 { padding-left: 0 !important; }
 
     .keyboard-diagram, .virtual-keyboard {
         padding: 14px 8px;
@@ -1537,11 +1534,10 @@ footer a:hover { text-decoration: underline; }
     }
 
     .wide-space { width: 130px !important; }
-    .wide-shift, .wide-backspace, .wide-enter, .wide-caps, .wide-tab {
-        width: auto !important;
-        flex: 1;
-        min-width: 32px;
-    }
+    .key.wide-tab { width: 39px !important; }
+    .key.wide-caps { width: 45px !important; }
+    .key.wide-shift { width: 58px !important; }
+    .key.wide-backspace, .key.wide-enter { width: 52px !important; }
 }
 
 /* ==================== PRINT ==================== */
