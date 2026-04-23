@@ -37,7 +37,7 @@ let userProgress = {
         streak: 0
     },
     points: 0,
-    currentLanguage: localStorage.getItem('currentLanguage') || 'arabic',
+    currentLanguage: localStorage.getItem('currentLanguage') || 'english',
     theme: localStorage.getItem('theme') || 'light'
 };
 
@@ -48,7 +48,7 @@ let userData = {
     accuracyHistory: JSON.parse(localStorage.getItem('accuracyHistory')) || [],
     achievements: JSON.parse(localStorage.getItem('achievements')) || [],
     completedLessons: JSON.parse(localStorage.getItem('completedLessons')) || [],
-    currentLanguage: localStorage.getItem('currentLanguage') || 'arabic'
+    currentLanguage: localStorage.getItem('currentLanguage') || 'english'
 };
 
 // دالة التحقق من صحة هيكل البيانات المسترجعة
@@ -59,7 +59,7 @@ function validateProgress(data) {
         achievements: { "المتابعة": false, "الدفعة 95%": false, "سريعة 20": false, "الحلال": false, "المحترف": false, "عاشق البرمجة": false, "سريع جدا": false, "منضبط": false, "القناص": false, "الأسطورة": false },
         sessions: { totalPlayTime: 0, lastPlayed: null, streak: 0 },
         points: 0,
-        currentLanguage: 'arabic',
+        currentLanguage: 'english',
         theme: 'light'
     };
 
@@ -269,12 +269,12 @@ const i18n = {
         "label-remaining-time": "الوقت المتبقي",
         "label-errors": "الأخطاء",
         "btn-start-exercise": "ابدأ التمرين",
-        "key-tab": "Tab",
-        "key-caps": "Caps",
-        "key-shift": "Shift",
-        "key-back": "Back",
-        "key-enter": "Enter",
-        "key-space": "Space",
+        "key-tab": "تبويب",
+        "key-caps": "كابس",
+        "key-shift": "عالي",
+        "key-back": "حذف",
+        "key-enter": "إدخال",
+        "key-space": "مسافة",
         "prog-hero-title": "ابدأ تعلم البرمجة",
         "prog-hero-desc": "اختر لغة وابدأ رحلتك التعليمية اليوم",
         "prog-explore-btn": "ابدأ التعلم الآن",
@@ -1464,6 +1464,13 @@ const KEYBOARD_DATA = [
     ]
 ];
 
+const ARABIC_KEYS_MAP = {
+    'q':'ض', 'w':'ص', 'e':'ث', 'r':'ق', 't':'ف', 'y':'غ', 'u':'ع', 'i':'ه', 'o':'خ', 'p':'ح', '[':'ج', ']':'د',
+    'a':'ش', 's':'س', 'd':'ي', 'f':'ب', 'g':'ل', 'h':'ا', 'j':'ت', 'k':'ن', 'l':'م', ';':'ك', "'":'ط',
+    'z':'ئ', 'x':'ء', 'c':'ؤ', 'v':'ر', 'b':'لا', 'n':'ى', 'm':'ة', ',':'و', '.':'ز', '/':'ظ',
+    '`':'ذ', '1':'١', '2':'٢', '3':'٣', '4':'٤', '5':'٥', '6':'٦', '7':'٧', '8':'٨', '9':'٩', '0':'٠'
+};
+
 function renderKeyboard(selector) {
     const containers = document.querySelectorAll(selector);
     if (containers.length === 0) return;
@@ -1481,7 +1488,14 @@ function renderKeyboard(selector) {
                 if (keyData.home) keyDiv.style.borderBottom = `3px solid #a78bfa`;
                 if (keyData.i18n) keyDiv.setAttribute('data-i18n', keyData.i18n);
                 
-                keyDiv.textContent = keyData.k;
+                keyDiv.setAttribute('data-key', keyData.k.toLowerCase());
+                
+                let displayText = keyData.k;
+                if (userProgress.currentLanguage === 'arabic' && ARABIC_KEYS_MAP[displayText.toLowerCase()]) {
+                    displayText = ARABIC_KEYS_MAP[displayText.toLowerCase()];
+                }
+                
+                keyDiv.textContent = displayText;
                 rowDiv.appendChild(keyDiv);
             });
             container.appendChild(rowDiv);
