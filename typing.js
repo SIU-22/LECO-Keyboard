@@ -1,3 +1,7 @@
+// Project developed by Mohamed Ahmed Al-Bashir
+// All rights reserved © 2026
+console.log("🚀 Built by Mohamed Ahmed Al-Bashir — All rights reserved");
+
 // ==================== هيكل البيانات (Progress System) ====================
 let userProgress = {
     stats: {
@@ -7,7 +11,7 @@ let userProgress = {
         bestSpeed: 0,
         totalWords: 0,
         correctWords: 0,
-        mistakes: 0,
+        errors: 0,
         perfectExercises: 0
     },
     lessons: {
@@ -20,7 +24,12 @@ let userProgress = {
         "الدفعة 95%": false,
         "سريعة 20": false,
         "الحلال": false,
-        "المحترف": false
+        "المحترف": false,
+        "عاشق البرمجة": false,
+        "سريع جدا": false,
+        "منضبط": false,
+        "القناص": false,
+        "الأسطورة": false
     },
     sessions: {
         totalPlayTime: 0,
@@ -42,18 +51,49 @@ let userData = {
     currentLanguage: localStorage.getItem('currentLanguage') || 'arabic'
 };
 
+// دالة التحقق من صحة هيكل البيانات المسترجعة
+function validateProgress(data) {
+    const template = {
+        stats: { accuracy: 0, bestAccuracy: 0, speed: 0, bestSpeed: 0, totalWords: 0, correctWords: 0, errors: 0, perfectExercises: 0 },
+        lessons: { completed: [], currentLesson: 1, lessonsHistory: [] },
+        achievements: { "المتابعة": false, "الدفعة 95%": false, "سريعة 20": false, "الحلال": false, "المحترف": false, "عاشق البرمجة": false, "سريع جدا": false, "منضبط": false, "القناص": false, "الأسطورة": false },
+        sessions: { totalPlayTime: 0, lastPlayed: null, streak: 0 },
+        points: 0,
+        currentLanguage: 'arabic',
+        theme: 'light'
+    };
+
+    // دمج البيانات المسترجعة مع القالب لضمان عدم وجود خصائص مفقودة
+    const merged = { ...template, ...data };
+    merged.stats = { ...template.stats, ...data.stats };
+    merged.lessons = { ...template.lessons, ...data.lessons };
+    merged.achievements = { ...template.achievements, ...data.achievements };
+    merged.sessions = { ...template.sessions, ...data.sessions };
+    
+    // التأكد من أن المصفوفات هي مصفوفات فعلاً
+    if (!Array.isArray(merged.lessons.completed)) merged.lessons.completed = [];
+    if (!Array.isArray(merged.lessons.lessonsHistory)) merged.lessons.lessonsHistory = [];
+    
+    return merged;
+}
+
 // وظيفة استرجاع البيانات المدمجة
 function loadGameProgress() {
     const saved = localStorage.getItem('leco_user_progress');
     if (saved) {
-        userProgress = JSON.parse(saved);
+        try {
+            const parsed = JSON.parse(saved);
+            userProgress = validateProgress(parsed);
+        } catch (e) {
+            console.error("Error parsing progress data:", e);
+            // البقاء على القيم الافتراضية في حال الخطأ
+        }
     } else {
         // محاولة الهجرة من النظام القديم إذا وجد
         if (userData.points > 0 || userData.completedLessons.length > 0) {
             userProgress.points = userData.points;
             userProgress.lessons.completed = Array.isArray(userData.completedLessons) ? userData.completedLessons : [];
             if (userData.speedHistory && userData.speedHistory.length > 0) {
-                // استخراج السرعات من الكائنات
                 const speeds = userData.speedHistory.map(h => typeof h === 'object' ? h.speed : h).filter(s => !isNaN(s));
                 if (speeds.length > 0) userProgress.stats.bestSpeed = Math.max(...speeds);
                 
@@ -61,16 +101,6 @@ function loadGameProgress() {
                 if (accuracies.length > 0) userProgress.stats.bestAccuracy = Math.max(...accuracies);
             }
             saveGameProgress();
-        }
-    }
-    
-    // تأمين أن completed مصفوفة دائماً (Migration)
-    if (!Array.isArray(userProgress.lessons.completed)) {
-        const oldVal = userProgress.lessons.completed;
-        userProgress.lessons.completed = [];
-        if (typeof oldVal === 'number' && oldVal > 0) {
-            // تحويل الرقم إلى مصفوفة من المعرفات (افتراض تسلسلي)
-            for (let i = 1; i <= oldVal; i++) userProgress.lessons.completed.push(i);
         }
     }
 }
@@ -92,8 +122,13 @@ function checkLessonParam() {
         if (lesson) {
             // تهيئة التمرين بناءً على الدرس
             currentExercise.targetText = lesson.exercises[0]; // البدء بأول تمرين في الدرس
+            
+            // تهيئة واجهة المستخدم للدرس
             const targetDisplay = document.getElementById('targetText');
-            if (targetDisplay) targetDisplay.textContent = currentExercise.targetText;
+            if (targetDisplay) {
+                targetDisplay.textContent = currentExercise.targetText;
+                highlightTextState(); // تهيئة الأسبان
+            }
             
             // تحديث العنوان ليظهر اسم الدرس
             const title = document.querySelector('.exercise-header h3');
@@ -101,6 +136,9 @@ function checkLessonParam() {
             
             currentExercise.isLesson = true;
             currentExercise.lessonId = lesson.id;
+            
+            // التمييز الأولي للمفتاح
+            highlightNextKey(currentExercise.targetText[0]);
         }
     }
 }
@@ -111,7 +149,21 @@ const achievementsData = [
     { id: "الدفعة 95%", name: { ar: "الدفعة 95%", en: "Accuracy 95%" }, desc: { ar: "دقة ≥ 95% في تمرين", en: "Accuracy ≥ 95% in any exercise" }, icon: "🎯" },
     { id: "سريعة 20", name: { ar: "سريعة 20", en: "Speed 20" }, desc: { ar: "سرعة ≥ 20 كلمة/دقيقة", en: "Speed ≥ 20 WPM" }, icon: "⚡" },
     { id: "الحلال", name: { ar: "الحلال", en: "Halal (Perfect)" }, desc: { ar: "إكمال تمرين بدون أخطاء", en: "Complete an exercise with no errors" }, icon: "💯" },
-    { id: "المحترف", name: { ar: "المحترف", en: "Professional" }, desc: { ar: "سرعة ≥ 50 كلمة/دقيقة", en: "Speed ≥ 50 WPM" }, icon: "👑" }
+    { id: "المحترف", name: { ar: "المحترف", en: "Professional" }, desc: { ar: "سرعة ≥ 50 كلمة/دقيقة", en: "Speed ≥ 50 WPM" }, icon: "👑" },
+    { id: "عاشق البرمجة", name: { ar: "عاشق البرمجة", en: "Code Lover" }, desc: { ar: "إكمال أول تمرين برمجي", en: "Complete first coding exercise" }, icon: "💻" },
+    { id: "سريع جدا", name: { ar: "سريع جدا", en: "Super Sonic" }, desc: { ar: "سرعة ≥ 80 كلمة/دقيقة", en: "Speed ≥ 80 WPM" }, icon: "🚀" },
+    { id: "منضبط", name: { ar: "منضبط", en: "Disciplined" }, desc: { ar: "إكمال 10 دروس", en: "Complete 10 lessons" }, icon: "📅" },
+    { id: "القناص", name: { ar: "القناص", en: "Sniper" }, desc: { ar: "إكمال 3 تمارين متتالية بدقة 100%", en: "Complete 3 exercises with 100% accuracy" }, icon: "🔭" },
+    { id: "الأسطورة", name: { ar: "الأسطورة", en: "The Legend" }, desc: { ar: "تحقيق 10,000 نقطة", en: "Reach 10,000 points" }, icon: "💎" }
+];
+
+// ==================== بيانات الشارات ====================
+const badgesData = [
+    { id: "beginner", name: { ar: "مبتدئ واعد", en: "Rising Star" }, icon: "🌱", requirement: 1 },
+    { id: "intermediate", name: { ar: "متدرب مجتهد", en: "Hard Worker" }, icon: "🛠️", requirement: 5 },
+    { id: "pro", name: { ar: "خبير السرعة", en: "Speed Master" }, icon: "🚀", requirement: 10 },
+    { id: "master", name: { ar: "أستاذ الكيبورد", en: "Keyboard Master" }, icon: "🎓", requirement: 20 },
+    { id: "god", name: { ar: "إله الكتابة", en: "Typing God" }, icon: "✨", requirement: 50 }
 ];
 
 // تم استبداله بـ achievementsData أعلاه
@@ -124,11 +176,13 @@ const i18n = {
         "nav-lessons": "الدروس",
         "nav-exercises": "تمارين تفاعلية",
         "nav-progress": "تقدمي",
+        "nav-coding": "اختبار البرمجة",
         "nav-programming": "تعلم البرمجة",
         "nav-about": "عن الموقع",
         "hero-title": "أتقن الكتابة السريعة على الكيبورد",
         "hero-desc": "تعلم الكتابة بسرعة 60 كلمة في الدقيقة مع تمارين تفاعلية وممتعة",
         "speed-test-title": "اختبر سرعتك الآن",
+        "test-text-default": "مرحبا بكم في موقع تعليم الكتابة السريعة",
         "input-placeholder": "ابدأ الكتابة هنا...",
         "timer-label": "الوقت",
         "speed-label": "السرعة",
@@ -155,7 +209,7 @@ const i18n = {
         "finger-7": "البنصر",
         "finger-8": "الخنصر",
         "home-row-guide": "صف الأساس (f و j)",
-        "footer-rights": "جميع الحقوق محفوظة &copy; 2026",
+        "footer-rights": "© 2026 محمد أحمد البشير — بكل فخر، نسخر شغفنا لنرتقي بمجتمع المبرمجين إلى آفاقٍ جديدة. جميع الحقوق محفوظة.",
         "lessons-title": "الدروس التعليمية",
         "lessons-desc": "اختر الدرس المناسب لمستواك",
         "tab-beginner": "مبتدئ",
@@ -164,23 +218,37 @@ const i18n = {
         "lesson-duration": "المدة",
         "lesson-start": "ابدأ الدرس",
         "points-label": "نقطة",
-        "about-title": "عن موقع LECO Keyboard",
-        "about-story-title": "قصتنا",
-        "about-story-desc": "موقع كيبورد LECO هو مشروع تعليمي يهدف للمساعدة على إتقان مهارة الكتابة السريعة على لوحة المفاتيح. تأسس الموقع في 2026 كجزء من مشروع جامعي لتطوير مهارات البرمجة وتقديم محتوى تعليمي مفيد.",
-        "about-mission-title": "مهمتنا",
-        "about-mission-desc": "نسعى لتوفير منصة تعليمية متكاملة باللغة العربية و الانجليزية تساعد المبتدئين والمحترفين على تحسين سرعة ودقة الكتابة على الكيبورد من خلال تمارين تفاعلية ودروس منظمة.",
-        "about-features-title": "مميزات الموقع",
-        "about-feat-1": "واجهة عربية سهلة الاستخدام",
-        "about-feat-2": "تمارين تفاعلية مع تقييم فوري",
-        "about-feat-3": "إحصائيات مفصلة عن تقدم المستخدم",
-        "about-feat-4": "نظام مكافآت وإنجازات لتحفيز المتعلمين",
-        "about-feat-5": "محتوى مجاني بالكامل",
+        "about-title": "حيث تلتقي سرعة الكتابة بعقلية المبرمج",
+        "about-story-title": "مهمتنا",
+        "about-story-desc": "في LECO Keyboard، نؤمن بأن كل سطر برمجي عظيم يبدأ بإتقان لوحة المفاتيح. نحن منصة تعليمية تقنية تُركّز على مهارتين أساسيتين لأي مستخدم ناجح خلف الشاشة: الكتابة السريعة بدقة قياسية، وتعلم أساسيات البرمجة بمنهجية منظمة. هدفنا أن يتحول الطالب من مستخدم عادي إلى مُنتج فعّال في العصر الرقمي.",
+        "about-mission-title": "لماذا LECO؟",
+        "about-mission-desc": "نُدرك أن الطلاب والمبرمجين المبتدئين يحتاجون إلى أكثر من مجرد تمارين — يحتاجون إلى أدوات قياس موثوقة وتغذية راجعة فورية. لهذا بنينا LECO على ثلاثة ركائز تقنية لا تُتنازل عنها:",
+        "about-features-title": "ركائزنا التقنية",
+        "about-feat-1": "دقة الحسابات: نقيس سرعتك بوحدة WPM مع حساب دقيق لمعدل الخطأ وصافي الكلمات الصحيحة، لأن الرقم الحقيقي هو ما يُحفّزك على التطور.",
+        "about-feat-2": "المنهجية التعليمية: مسار تدريجي متكامل يبدأ من أساسيات استخدام لوحة المفاتيح، وصولاً إلى كتابة أكواد بلغة (HTML, CSS, JavaScript, Python, C++, PHP, Java) مُصمَّم خصيصًا للمبتدئ الذي يسعى للتفكير بعقلية المبرمج.",
+        "about-feat-3": "تجربة مستخدم سلسة: واجهة ثنائية اللغة (عربي / إنجليزي)، تصميم داكن يُريح العينين، ومؤشرات تقدم مرئية تجعل التعلم تجربة تفاعلية لا تُنسى.",
+        "about-feat-4": "نظام إنجازات وشارات يُحفّزك لتحطيم رقمك القياسي في كل جلسة",
+        "about-feat-5": "محتوى مجاني 100% — لأن الوصول إلى التعليم التقني حق للجميع",
+        "about-stat-exercises": "50+ تمرين تفاعلي",
+        "about-stat-achievements": "نظام إنجازات",
+        "about-stat-wpm": "دقة WPM",
+        "about-stat-langs": "أكثر من 7 لغات",
+        "about-stat-lessons-count": "أكثر من 20 درس",
+        "about-stat-bilingual": "عربي / إنجليزي",
+        "about-stat-free": "مجاني 100%",
+        "about-cta-title": "ابدأ الآن",
+        "about-cta-desc": "كل خبير كان مبتدئاً ذات يوم. ابدأ أول اختبار سرعة الآن، أو اغمر نفسك في أول درس برمجة — المقياس الحقيقي لتقدمك يبدأ بضغطة مفتاح.",
+        "about-cta-btn": "ابدأ اختبار السرعة",
+        "about-cta-btn2": "ابدأ أول درس برمجة",
         "role-ux": "مصمم تجربة المستخدم",
         "role-dev": "مطور الواجهات الأمامية",
         "role-content": "مطور المحتوى التعليمي",
         "progress-title": "مسار تقدمك",
         "stats-speed": "أفضل سرعة",
+        "stats-accuracy": "متوسط الدقة",
+        "stats-lessons": "الدروس المكتملة",
         "achievements-title": "إنجازاتك",
+        "badges-title": "الشارات التي حصلت عليها",
         "chart-speed-title": "تطور السرعة",
         "chart-accuracy-title": "تطور الدقة",
         "stat-avg-speed": "متوسط السرعة",
@@ -209,7 +277,9 @@ const i18n = {
         "key-space": "Space",
         "prog-hero-title": "ابدأ تعلم البرمجة",
         "prog-hero-desc": "اختر لغة وابدأ رحلتك التعليمية اليوم",
-        "prog-explore-btn": "استكشف الدورات",
+        "prog-explore-btn": "ابدأ التعلم الآن",
+        "coding-test-title": "اختبار البرمجة التفاعلي",
+        "coding-test-desc": "اكتب الكود وجربه مباشرة هنا",
         "prog-cat-html-desc": "لغة هيكلة صفحات الويب الأساسية",
         "prog-cat-css-desc": "لغة تنسيق وتصميم صفحات الويب بشكل احترافي",
         "prog-cat-js-desc": "لغة البرمجة لجعل الصفحات تفاعلية وديناميكية",
@@ -223,7 +293,13 @@ const i18n = {
         "prog-feat-2-title": "مصادر مجانية",
         "prog-feat-2-desc": "وصول كامل لأفضل المصادر التعليمية العالمية",
         "prog-feat-3-title": "دروس متدرجة",
-        "prog-feat-3-desc": "تعلم خطوة بخطوة من الصفر حتى الاحتراف"
+        "prog-feat-3-desc": "تعلم خطوة بخطوة من الصفر حتى الاحتراف",
+        "result-title": "نتيجة التمرين",
+        "result-max-speed": "السرعة القصوى:",
+        "result-avg-accuracy": "متوسط الدقة:",
+        "result-keystrokes": "إجمالي الضغطات:",
+        "result-points": "النقاط المكتسبة:",
+        "result-save-btn": "حفظ النتيجة والمتابعة"
     },
     english: {
         "site-title": "Learn Typing",
@@ -231,11 +307,13 @@ const i18n = {
         "nav-lessons": "Lessons",
         "nav-exercises": "Exercises",
         "nav-progress": "Progress",
+        "nav-coding": "Coding Test",
         "nav-programming": "Learn Coding",
         "nav-about": "About",
         "hero-title": "Master Touch Typing",
         "hero-desc": "Learn to type 60 WPM with fun and interactive exercises",
         "speed-test-title": "Test Your Speed Now",
+        "test-text-default": "Welcome to the typing speed learning website",
         "input-placeholder": "Start typing here...",
         "timer-label": "Time",
         "speed-label": "Speed",
@@ -262,7 +340,7 @@ const i18n = {
         "finger-7": "Ring",
         "finger-8": "Pinky",
         "home-row-guide": "Home Row (f & j)",
-        "footer-rights": "All rights reserved &copy; 2026",
+        "footer-rights": "© 2026 Mohamed Ahmed Al-Bashir — Proudly leveraging our passion to elevate the developer community to new horizons. All rights reserved.",
         "lessons-title": "Educational Lessons",
         "lessons-desc": "Choose the right level for you",
         "tab-beginner": "Beginner",
@@ -271,17 +349,28 @@ const i18n = {
         "lesson-duration": "Duration",
         "lesson-start": "Start Lesson",
         "points-label": "Points",
-        "about-title": "About LECO Keyboard",
-        "about-story-title": "Our Story",
-        "about-story-desc": "LECO Keyboard is an educational project aimed at mastering touch typing skills. Founded in 2026 as a university project to develop coding skills and provide useful educational content.",
-        "about-mission-title": "Our Mission",
-        "about-mission-desc": "We strive to provide a comprehensive training platform in Arabic and English that helps beginners and professionals improve typing speed and accuracy through interactive exercises and structured lessons.",
-        "about-features-title": "Site Features",
-        "about-feat-1": "Easy to use bilingual interface",
-        "about-feat-2": "Interactive exercises with instant feedback",
-        "about-feat-3": "Detailed statistics on user progress",
-        "about-feat-4": "Rewards system and achievements to motivate users",
-        "about-feat-5": "Entirely free content",
+        "about-title": "Where Typing Speed Meets the Programmer's Mindset",
+        "about-story-title": "Our Mission",
+        "about-story-desc": "At LECO Keyboard, we believe every great line of code starts with mastering your keyboard. We are a tech-focused educational platform built around two fundamental skills every successful screen-user needs: precision-driven touch typing and structured programming fundamentals. Our goal is to transform every learner from a passive user into a productive digital creator.",
+        "about-mission-title": "Why LECO?",
+        "about-mission-desc": "Students and beginner programmers need more than exercises — they need reliable measurement tools and instant, actionable feedback. That's why LECO is built on three non-negotiable technical pillars:",
+        "about-features-title": "Our Key Pillars",
+        "about-feat-1": "Technical Accuracy: We measure your speed in true WPM with precise error-rate and net-correct-word calculations — because an honest number is what drives real improvement.",
+        "about-feat-2": "Structured Methodology: A comprehensive progressive path starting from keyboard fundamentals to writing code in (HTML, CSS, JavaScript, Python, C++, PHP, Java), specifically designed for beginners who aim to think with a programmer's mindset.",
+        "about-feat-3": "Seamless UX: A bilingual (Arabic / English) interface, eye-friendly dark mode, and visual progress indicators that make every session an engaging, interactive experience.",
+        "about-feat-4": "Achievement & badge system to motivate you to break your personal record every session",
+        "about-feat-5": "100% free content — because access to technical education is a right, not a privilege",
+        "about-stat-exercises": "50+ Exercises",
+        "about-stat-achievements": "Achievements",
+        "about-stat-wpm": "WPM Precision",
+        "about-stat-langs": "7+ Languages",
+        "about-stat-lessons-count": "20+ Lessons",
+        "about-stat-bilingual": "AR / EN",
+        "about-stat-free": "100% Free",
+        "about-cta-title": "Start Now",
+        "about-cta-desc": "Every expert was once a beginner. Take your first speed test right now, or dive into your first coding lesson — your true progress starts with a single keystroke.",
+        "about-cta-btn": "Start Speed Test",
+        "about-cta-btn2": "Start First Coding Lesson",
         "role-ux": "UX Designer",
         "role-dev": "Frontend Developer",
         "role-content": "Educational Content Developer",
@@ -290,6 +379,7 @@ const i18n = {
         "stats-accuracy": "Avg. Accuracy",
         "stats-lessons": "Lessons Completed",
         "achievements-title": "Your Achievements",
+        "badges-title": "Earned Badges",
         "chart-speed-title": "Speed Progress",
         "chart-accuracy-title": "Accuracy Progress",
         "stat-avg-speed": "Average Speed",
@@ -318,7 +408,9 @@ const i18n = {
         "key-space": "Space",
         "prog-hero-title": "Start Learning Programming",
         "prog-hero-desc": "Choose a language and begin your journey today",
-        "prog-explore-btn": "Explore Courses",
+        "prog-explore-btn": "Start Learning Now",
+        "coding-test-title": "Interactive Coding Test",
+        "coding-test-desc": "Write code and test it live here",
         "prog-cat-html-desc": "The foundational language for building web pages",
         "prog-cat-css-desc": "Style and design your web pages professionally",
         "prog-cat-js-desc": "Add interactivity and dynamics to your websites",
@@ -332,7 +424,13 @@ const i18n = {
         "prog-feat-2-title": "Free Resources",
         "prog-feat-2-desc": "Full access to world-class learning materials",
         "prog-feat-3-title": "Step-by-Step",
-        "prog-feat-3-desc": "Progress from zero to professional mastery"
+        "prog-feat-3-desc": "Progress from zero to professional mastery",
+        "result-title": "Exercise Result",
+        "result-max-speed": "Max Speed:",
+        "result-avg-accuracy": "Avg. Accuracy:",
+        "result-keystrokes": "Total Keystrokes:",
+        "result-points": "Points Earned:",
+        "result-save-btn": "Save Result & Continue"
     }
 };
 
@@ -528,6 +626,189 @@ const lessons = [
         duration: "25 minutes",
         completed: false,
         points: 100
+    },
+    // دروس إضافية عربية
+    {
+        id: 11,
+        title: "الدرس السادس: التنوين والشدة",
+        level: "intermediate",
+        language: "arabic",
+        description: "تدرب على علامات التشكيل الأساسية",
+        content: "التنوين: ً ٍ ٌ - الشدة: ّ",
+        exercises: ["محمدٌ كتاباً مدرسةٍ يحبُّ"],
+        duration: "20 دقيقة",
+        completed: false,
+        points: 90
+    },
+    {
+        id: 12,
+        title: "الدرس السابع: الأرقام والرموز",
+        level: "intermediate",
+        language: "arabic",
+        description: "تعلم كتابة الأرقام والرموز الشائعة",
+        content: "الأرقام: ١٢٣٤٥٦٧٨٩٠ - الرموز: ! @ # $ % & *",
+        exercises: ["١٢٣ ٤٥٦ ٧٨٩ !@# $%&"],
+        duration: "15 دقيقة",
+        completed: false,
+        points: 70
+    },
+    {
+        id: 13,
+        title: "الدرس الثامن: نصوص أدبية قصيرة",
+        level: "advanced",
+        language: "arabic",
+        description: "كتابة فقرات من الأدب العربي",
+        content: "تدرب على نصوص متصلة وطويلة",
+        exercises: ["إنما الأمم الأخلاق ما بقيت فإن هم ذهبت أخلاقهم ذهبوا"],
+        duration: "30 دقيقة",
+        completed: false,
+        points: 150
+    },
+    {
+        id: 14,
+        title: "الدرس التاسع: السرعة والتركيز",
+        level: "advanced",
+        language: "arabic",
+        description: "تحدي السرعة في كتابة كلمات متنوعة",
+        content: "مزيج من الكلمات الصعبة والسهلة",
+        exercises: ["استكشاف تكنولوجيا المستقبل يتطلب إرادة وعمل مستمر"],
+        duration: "25 دقيقة",
+        completed: false,
+        points: 120
+    },
+    {
+        id: 15,
+        title: "الدرس العاشر: الاختبار الشامل",
+        level: "advanced",
+        language: "arabic",
+        description: "اختبر مهاراتك في نص شامل",
+        content: "نص يحتوي على كافة الحروف والرموز",
+        exercises: ["تعلم الكتابة السريعة هو مفتاح النجاح في العصر الرقمي الحديث 2026!"],
+        duration: "40 دقيقة",
+        completed: false,
+        points: 200
+    },
+    // Additional English Lessons
+    {
+        id: 16,
+        title: "Lesson 6: Capital Letters & Punctuation",
+        level: "intermediate",
+        language: "english",
+        description: "Use Shift key and common punctuation",
+        content: "Practice: . , ? ! ' \" ( )",
+        exercises: ["Does he like it? Yes, he does!"],
+        duration: "20 minutes",
+        completed: false,
+        points: 90
+    },
+    {
+        id: 17,
+        title: "Lesson 7: Numbers & Special Symbols",
+        level: "intermediate",
+        language: "english",
+        description: "Learn top row numbers and symbols",
+        content: "Numbers: 1234567890 Symbols: @#$%^&*",
+        exercises: ["Price: $19.99 @ 10% discount!"],
+        duration: "15 minutes",
+        completed: false,
+        points: 75
+    },
+    {
+        id: 18,
+        title: "Lesson 8: Business English Phrases",
+        level: "advanced",
+        language: "english",
+        description: "Type professional emails and phrases",
+        content: "Common workplace language",
+        exercises: ["Please find the attached document for your review."],
+        duration: "30 minutes",
+        completed: false,
+        points: 140
+    },
+    {
+        id: 19,
+        title: "Lesson 9: Famous Quotes",
+        level: "advanced",
+        language: "english",
+        description: "Type inspirational quotes by famous people",
+        content: "Longer connected sentences",
+        exercises: ["The best way to predict the future is to create it."],
+        duration: "25 minutes",
+        completed: false,
+        points: 130
+    },
+    {
+        id: 20,
+        title: "Lesson 10: Final Master Challenge",
+        level: "advanced",
+        language: "english",
+        description: "The ultimate test for English typing",
+        content: "A mix of everything you've learned",
+        exercises: ["Professional touch typing requires 100% focus and zero mistakes in 2026!"],
+        duration: "45 minutes",
+        completed: false,
+        points: 250
+    },
+    // Programming & Coding Lessons
+    {
+        id: 21,
+        title: "Programming: HTML Tags",
+        level: "intermediate",
+        language: "english",
+        description: "Practice typing standard HTML tags",
+        content: "<div>, <span>, <section>, <footer>",
+        exercises: ["<div class='container'><p>Hello</p></div>"],
+        duration: "10 min",
+        completed: false,
+        points: 100
+    },
+    {
+        id: 22,
+        title: "Programming: Python Print",
+        level: "intermediate",
+        language: "english",
+        description: "Learn Python print and variables",
+        content: "print, input, variables",
+        exercises: ["name = input('Name: ')\nprint('Hello ' + name)"],
+        duration: "10 min",
+        completed: false,
+        points: 100
+    },
+    {
+        id: 23,
+        title: "Programming: Java Class",
+        level: "advanced",
+        language: "english",
+        description: "Basic Java class structure",
+        content: "public class, main, System.out",
+        exercises: ["public class Test {\n  public static void main(String[] args) {\n  }\n}"],
+        duration: "15 min",
+        completed: false,
+        points: 150
+    },
+    {
+        id: 24,
+        title: "برمجة: وسوم HTML",
+        level: "intermediate",
+        language: "arabic",
+        description: "تدرب على كتابة وسوم HTML الأساسية",
+        content: "وسوم: div, p, h1, span",
+        exercises: ["<div class='box'><h1>مرحباً</h1></div>"],
+        duration: "10 دقيقة",
+        completed: false,
+        points: 100
+    },
+    {
+        id: 25,
+        title: "برمجة: لغة Python",
+        level: "intermediate",
+        language: "arabic",
+        description: "أساسيات لغة بايثون",
+        content: "print, variables, input",
+        exercises: ["x = 5\ny = 10\nprint(x + y)"],
+        duration: "10 دقيقة",
+        completed: false,
+        points: 100
     }
 ];
 
@@ -554,6 +835,7 @@ document.addEventListener('DOMContentLoaded', function() {
     updateUserPoints();
     loadLessons();
     loadAchievements();
+    loadBadges();
     
     // تهيئة واجهة المستخدم عند التحميل
     updateStatsUI();
@@ -569,21 +851,35 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // تهيئة لوحة المفاتيح والتمارين
     if (typeof setupKeyboardLayout === 'function') setupKeyboardLayout();
-    if (typeof setupSpeedTest === 'function') {
-        if (document.getElementById('testText')) {
-            setupSpeedTest();
-        }
-    }
-    if (typeof setupTypingExercise === 'function') {
-        if (document.getElementById('typingArea')) {
-            setupTypingExercise();
-        }
+    
+    if (typeof setupSpeedTest === 'function' && document.getElementById('testText')) {
+        setupSpeedTest();
     }
     
+    if (typeof setupTypingExercise === 'function' && document.getElementById('typingArea')) {
+        setupTypingExercise();
+    }
+    
+    // تهيئة لوحة المفاتيح ديناميكياً إذا كان الحاوي موجوداً
+    if (document.querySelector('.keyboard-diagram')) {
+        renderKeyboard('.keyboard-diagram');
+    }
+    
+    // إعداد مزامنة الكيبورد الحقيقي
+    setupPhysicalKeyboardSync();
+
     // إذا كنا في صفحة التقدم
     if (document.getElementById('speedChart')) {
         if (typeof initCharts === 'function') initCharts();
     }
+    
+    // نظام الحفظ التلقائي الدوري (كل دقيقة)
+    setInterval(() => {
+        if (currentExercise.active && currentExercise.startTime) {
+            userProgress.sessions.lastPlayed = new Date().toISOString();
+        }
+        saveGameProgress();
+    }, 60000);
 });
 
 // ==================== القائمة الجانبية للجوال ====================
@@ -607,7 +903,7 @@ function setupMobileMenu() {
         
         // إغلاق القائمة عند النقر في أي مكان آخر
         document.addEventListener('click', function(e) {
-            if (!navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+            if (navMenu.classList.contains('active') && !navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
                 navMenu.classList.remove('active');
                 const icon = menuToggle.querySelector('i');
                 if (icon) {
@@ -617,9 +913,8 @@ function setupMobileMenu() {
             }
         });
 
-        // إغلاق القائمة عند النقر على رابط (مفيد في صفحات single page، لكن جيد للمصداقية هنا)
-        const navLinks = navMenu.querySelectorAll('a');
-        navLinks.forEach(link => {
+        // إغلاق القائمة عند النقر على رابط أو التنقل
+        navMenu.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
                 navMenu.classList.remove('active');
                 const icon = menuToggle.querySelector('i');
@@ -679,16 +974,23 @@ function startSpeedTest() {
     
     // بيانات الاختبار حسب اللغة
     let timeLeft = 60;
-    let mistakes = 0;
+    let errors = 0;
     let typedChars = 0;
-    let targetText = userProgress.currentLanguage === 'arabic' 
+    const lang = userProgress.currentLanguage;
+    let targetText = lang === 'arabic' 
         ? "مرحبا بكم في موقع تعليم الكتابة السريعة" 
-        : "Welcome to the typing speed test";
+        : "Welcome to the typing speed learning website";
     
-    // عرض النص
+    // عرض النص وتحديث الاتجاه
     if (testDisplay) {
         testDisplay.innerHTML = targetText;
-        testDisplay.setAttribute('lang', userProgress.currentLanguage);
+        testDisplay.setAttribute('lang', lang === 'arabic' ? 'ar' : 'en');
+        testDisplay.style.direction = lang === 'arabic' ? 'rtl' : 'ltr';
+        testDisplay.classList.add('test-running');
+    }
+    if (input) {
+        input.style.direction = lang === 'arabic' ? 'rtl' : 'ltr';
+        input.setAttribute('lang', lang === 'arabic' ? 'ar' : 'en');
     }
     
     // تحديث المؤقت كل ثانية
@@ -705,43 +1007,49 @@ function startSpeedTest() {
     // مراقبة الكتابة
     input.oninput = function() {
         const userText = input.value;
+        const targetText = lang === 'arabic' 
+            ? "مرحبا بكم في موقع تعليم الكتابة السريعة" 
+            : "Welcome to the typing speed learning website";
+        
         typedChars = userText.length;
         
-        // حساب الأخطاء
-        mistakes = 0;
-        for (let i = 0; i < userText.length; i++) {
-            if (i < targetText.length && userText[i] !== targetText[i]) {
-                mistakes++;
+        // حساب الأخطاء والسرعة والدقة
+        let currentMistakes = 0;
+        let highlighted = '';
+        
+        for (let i = 0; i < targetText.length; i++) {
+            let charClass = '';
+            if (i < userText.length) {
+                if (userText[i] === targetText[i]) {
+                    charClass = 'correct-char';
+                } else {
+                    charClass = 'error-char';
+                    currentMistakes++;
+                }
+            } else if (i === userText.length) {
+                charClass = 'active-char';
             }
+            highlighted += `<span class="${charClass}">${targetText[i]}</span>`;
         }
         
-        // حساب السرعة
-        const minutes = (60 - timeLeft) / 60;
-        const words = typedChars / 5;
-        const speed = minutes > 0 ? Math.round(words / minutes) : 0;
+        errors = currentMistakes;
+        if (testDisplay) testDisplay.innerHTML = highlighted;
+        
+        // حساب السرعة (WPM = (chars/5) / minutes)
+        const timeElapsedMinutes = (60 - timeLeft) / 60;
+        const speed = timeElapsedMinutes > 0 ? Math.round((typedChars / 5) / timeElapsedMinutes) : 0;
         if (speedSpan) speedSpan.textContent = speed;
         
         // حساب الدقة
-        const accuracy = typedChars > 0 ? Math.round(((typedChars - mistakes) / typedChars) * 100) : 100;
-        if (accuracySpan) accuracySpan.textContent = accuracy;
+        const accuracy = typedChars > 0 ? Math.round(((typedChars - errors) / typedChars) * 100) : 100;
+        if (accuracySpan) accuracySpan.textContent = Math.max(0, accuracy);
         
-        // تمييز النص
-        if (testDisplay) {
-            let highlighted = '';
-            for (let i = 0; i < targetText.length; i++) {
-                if (i < userText.length) {
-                    if (userText[i] === targetText[i]) {
-                        highlighted += `<span style="color: #0f6f37;">${targetText[i]}</span>`;
-                    } else {
-                        highlighted += `<span style="color: #da2b2b; text-decoration: underline;">${targetText[i]}</span>`;
-                    }
-                } else {
-                    highlighted += targetText[i];
-                }
-            }
-            testDisplay.innerHTML = highlighted;
+        // تمييز المفاتيح في الاختبار أيضاً
+        if (userText.length > 0) {
+            highlightKey(userText[userText.length - 1]);
         }
-        
+        highlightNextKey(targetText[userText.length]);
+
         // لو خلص النص
         if (userText.length === targetText.length) {
             clearInterval(timer);
@@ -753,6 +1061,9 @@ function startSpeedTest() {
 function endSpeedTest(input, startBtn, timerSpan, speedSpan, accuracySpan) {
     // إنهاء الاختبار
     if (input) input.disabled = true;
+    // إزالة علامة الاختبار الجاري من عرض النص
+    const testDisplay = document.querySelector('.test-text');
+    if (testDisplay) testDisplay.classList.remove('test-running');
     if (startBtn) {
         startBtn.disabled = false;
         startBtn.textContent = userProgress.currentLanguage === 'arabic' ? 'ابدأ الاختبار' : 'Start Test';
@@ -779,7 +1090,7 @@ function endSpeedTest(input, startBtn, timerSpan, speedSpan, accuracySpan) {
 }
 
 // ==================== إدارة التقدم العامة ====================
-function updateAfterExercise(accuracy, speed, mistakes, lessonCompleted = false) {
+function updateAfterExercise(accuracy, speed, errors, lessonCompleted = false) {
     // تحديث الدقة
     userProgress.stats.accuracy = accuracy;
     if (accuracy > userProgress.stats.bestAccuracy) {
@@ -793,8 +1104,8 @@ function updateAfterExercise(accuracy, speed, mistakes, lessonCompleted = false)
     }
 
     // تحديث الأخطاء والكمال
-    userProgress.stats.mistakes += mistakes;
-    if (mistakes === 0) {
+    userProgress.stats.errors += errors;
+    if (errors === 0) {
         userProgress.stats.perfectExercises += 1;
     }
 
@@ -803,23 +1114,46 @@ function updateAfterExercise(accuracy, speed, mistakes, lessonCompleted = false)
         if (!userProgress.lessons.completed.includes(currentExercise.lessonId)) {
             userProgress.lessons.completed.push(currentExercise.lessonId);
         }
-        userProgress.lessons.currentLesson = Math.max(...userProgress.lessons.completed, 0) + 1;
+        
+        // تحديث الدرس الحالي (الدرس التالي المتاح)
+        const allLessonIds = lessons.map(l => l.id).sort((a, b) => a - b);
+        const nextLesson = allLessonIds.find(id => !userProgress.lessons.completed.includes(id));
+        userProgress.lessons.currentLesson = nextLesson || allLessonIds[allLessonIds.length - 1];
     }
 
     // حفظ الوقت والتاريخ
     userProgress.sessions.lastPlayed = new Date().toISOString();
     
-    // التحقق من الإنجازات
-    checkAchievements(accuracy, speed, mistakes);
+    // تحديث وقت التدريب (بناءً على الوقت المستغرق في التمرين)
+    const timeSpentSeconds = (new Date() - currentExercise.startTime) / 1000;
+    userProgress.sessions.totalPlayTime += timeSpentSeconds;
+
+    // تحديث إجمالي الكلمات (بافتراض الكلمة 5 حروف)
+    userProgress.stats.totalWords += Math.floor(currentExercise.totalKeystrokes / 5);
+    userProgress.stats.correctWords += Math.floor((currentExercise.totalKeystrokes - currentExercise.errors) / 5);
     
+    // التحقق من الإنجازات
+    checkAchievements(accuracy, speed, errors);
+    
+    // إضافة التمرين للتاريخ تلقائياً (حفظ تلقائي)
+    userProgress.lessons.lessonsHistory.push({
+        date: new Date().toLocaleDateString(),
+        accuracy: accuracy,
+        speed: speed,
+        lessonId: currentExercise.lessonId || null
+    });
+
     // حفظ وعرض
     saveGameProgress();
     updateStatsUI();
+    
+    // تحديث واجهة الدروس فوراً إذا كانت موجودة
+    if (typeof loadLessons === 'function') loadLessons();
 }
 
-function checkAchievements(accuracy, speed, mistakes) {
+function checkAchievements(accuracy, speed, errors) {
     // 1. المتابعة: إكمال 5 دروس
-    if (userProgress.lessons.completed >= 5) {
+    if (userProgress.lessons.completed.length >= 5) {
         unlockAchievement("المتابعة");
     }
 
@@ -834,13 +1168,37 @@ function checkAchievements(accuracy, speed, mistakes) {
     }
 
     // 4. الحلال: تمرين بدون أخطاء
-    if (mistakes === 0) {
+    if (errors === 0) {
         unlockAchievement("الحلال");
     }
 
     // 5. المحترف: سرعة >= 50
     if (speed >= 50) {
         unlockAchievement("المحترف");
+    }
+
+    // 6. سريع جدا: سرعة >= 80
+    if (speed >= 80) {
+        unlockAchievement("سريع جدا");
+    }
+
+    // 7. منضبط: إكمال 10 دروس
+    if (userProgress.lessons.completed.length >= 10) {
+        unlockAchievement("منضبط");
+    }
+
+    // 8. الأسطورة: 10,000 نقطة
+    if (userProgress.points >= 10000) {
+        unlockAchievement("الأسطورة");
+    }
+
+    // 9. القناص: 3 تمارين متتالية بدقة 100%
+    const history = userProgress.lessons.lessonsHistory;
+    if (history.length >= 3) {
+        const last3 = history.slice(-3);
+        if (last3.every(ex => ex.accuracy === 100)) {
+            unlockAchievement("القناص");
+        }
     }
 }
 
@@ -925,10 +1283,11 @@ function updateStatsUI() {
         }
     }
 
-    const pointsNum = document.getElementById('userPoints');
-    if (pointsNum) {
-        animateCounter(pointsNum, parseInt(pointsNum.textContent) || 0, userProgress.points);
-    }
+    // تحديث كافة عناصر النقاط (بما في ذلك الموبايل)
+    const pointsElements = document.querySelectorAll('.user-points-val');
+    pointsElements.forEach(el => {
+        animateCounter(el, parseInt(el.textContent) || 0, userProgress.points);
+    });
 }
 
 function animateCounter(element, start, end) {
@@ -952,18 +1311,21 @@ function animateCounter(element, start, end) {
 }
 
 function updateAchievementsUI() {
+    loadAchievements();
+}
+
+function loadAchievements() {
     const container = document.getElementById('achievementsList');
     if (!container) return;
 
     container.innerHTML = '';
     const lang = userProgress.currentLanguage;
+    const displayLang = lang === 'arabic' ? 'ar' : 'en';
 
     achievementsData.forEach(ach => {
         const isUnlocked = userProgress.achievements[ach.id];
         const card = document.createElement('div');
         card.className = `achievement-card ${isUnlocked ? 'unlocked' : 'locked'}`;
-        
-        const displayLang = lang === 'arabic' ? 'ar' : 'en';
         
         card.innerHTML = `
             <div class="achievement-icon">${ach.icon}</div>
@@ -1004,6 +1366,9 @@ function setupLanguageSwitcher() {
 }
 
 // ==================== تحديث نصوص الواجهة حسب اللغة ====================
+// كاش للعناصر المترجمة لتحسين الأداء
+let i18nCache = null;
+
 function updateUITexts() {
     const lang = userProgress.currentLanguage;
     const translations = i18n[lang];
@@ -1012,20 +1377,28 @@ function updateUITexts() {
     document.documentElement.dir = lang === 'arabic' ? 'rtl' : 'ltr';
     document.documentElement.lang = lang === 'arabic' ? 'ar' : 'en';
     
-    // تحديث عنوان الصفحة (إذا كان يحتوي على فاصل)
+    // تحديث عنوان الصفحة
     if (document.title.includes(' - ')) {
         const parts = document.title.split(' - ');
         document.title = `${translations["site-title"]} - ${parts[1]}`;
     }
 
-    // تحديث كافة العناصر التي تحمل السمة data-i18n
-    document.querySelectorAll('[data-i18n]').forEach(el => {
+    // استخدام الكاش لتجنب البحث المتكرر في DOM
+    if (!i18nCache) {
+        i18nCache = document.querySelectorAll('[data-i18n]');
+    }
+
+    i18nCache.forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (translations[key]) {
             if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
                 el.placeholder = translations[key];
+            } else if (el.classList.contains('preserve-icons')) {
+                const icon = el.querySelector('i');
+                el.textContent = translations[key];
+                if (icon) el.prepend(icon);
             } else {
-                el.innerHTML = translations[key];
+                el.textContent = translations[key];
             }
         }
     });
@@ -1036,121 +1409,96 @@ function updateUITexts() {
         currentLangText.textContent = lang === 'arabic' ? 'العربية' : 'English';
     }
 
-    // تحديث العناصر القديمة التي تعتمد على الـ ID لضمان عدم الكسر
-    const legacyMap = {
-        'nav-home': 'nav-home',
-        'nav-lessons': 'nav-lessons',
-        'nav-exercises': 'nav-exercises',
-        'nav-progress': 'nav-progress',
-        'nav-about': 'nav-about',
-        'hero-title': 'hero-title',
-        'hero-desc': 'hero-desc',
-        'speed-test-title': 'speed-test-title',
-        'time-label': 'timer-label',
-        'speed-label': 'speed-label',
-        'accuracy-label': 'accuracy-label',
-        'start-btn': 'start-btn'
-    };
-
-    for (let [id, key] of Object.entries(legacyMap)) {
-        const el = document.getElementById(id);
-        if (el && translations[key]) {
-            el.textContent = translations[key];
-        }
+    // تحديث نصوص الاختبار
+    const testTextEl = document.getElementById('testText');
+    if (testTextEl && !testTextEl.classList.contains('test-running')) {
+        testTextEl.textContent = translations['test-text-default'] || 
+            (lang === 'arabic' ? 'مرحبا بكم في موقع تعليم الكتابة السريعة' : 'Welcome to the typing speed learning website');
+        testTextEl.style.direction = lang === 'arabic' ? 'rtl' : 'ltr';
     }
 }
 
-// ==================== إنشاء لوحة المفاتيح الافتراضية ====================
-function setupKeyboardLayout() {
-    const virtualKeyboard = document.getElementById('virtualKeyboard');
-    if (!virtualKeyboard) return;
-    
-    const layouts = {
-        arabic: [
-            ['ذ', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Back'],
-            ['Tab', 'ض', 'ص', 'ث', 'ق', 'ف', 'غ', 'ع', 'ه', 'خ', 'ح', 'ج', 'د', '\\'],
-            ['Caps', 'ش', 'س', 'ي', 'ب', 'ل', 'ا', 'ت', 'ن', 'م', 'ك', 'ط', 'Enter'],
-            ['Shift', 'ئ', 'ء', 'ؤ', 'ر', 'لا', 'ى', 'ة', 'و', 'ز', 'ظ', 'Shift'],
-            ['Space']
-        ],
-        english: [
-            ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Back'],
-            ['Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\'],
-            ['Caps', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', 'Enter'],
-            ['Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 'Shift'],
-            ['Space']
-        ]
-    };
-    
-    function renderKeyboard(language) {
-        const layout = layouts[language];
-        virtualKeyboard.innerHTML = '';
-        
-        layout.forEach((row, rowIndex) => {
+// ==================== توليد لوحة المفاتيح ديناميكياً ====================
+const KEYBOARD_DATA = [
+    [
+        { k: '`', c: '#ef4444' }, { k: '1', c: '#ef4444' }, { k: '2', c: '#f97316' }, { k: '3', c: '#eab308' },
+        { k: '4', c: '#22c55e' }, { k: '5', c: '#22c55e' }, { k: '6', c: '#14b8a6' }, { k: '7', c: '#14b8a6' },
+        { k: '8', c: '#3b82f6' }, { k: '9', c: '#8b5cf6' }, { k: '0', c: '#ec4899' }, { k: '-', c: '#ec4899' },
+        { k: '=', c: '#ec4899' }, { k: 'Back', c: '#ec4899', cls: 'wide-backspace', i18n: 'key-back' }
+    ],
+    [
+        { k: 'Tab', cls: 'wide-tab', i18n: 'key-tab' }, { k: 'q', c: '#ef4444' }, { k: 'w', c: '#f97316' },
+        { k: 'e', c: '#eab308' }, { k: 'r', c: '#22c55e' }, { k: 't', c: '#22c55e' }, { k: 'y', c: '#14b8a6' },
+        { k: 'u', c: '#14b8a6' }, { k: 'i', c: '#3b82f6' }, { k: 'o', c: '#8b5cf6' }, { k: 'p', c: '#ec4899' },
+        { k: '[', c: '#ec4899' }, { k: ']', c: '#ec4899' }, { k: '\\', c: '#ec4899' }
+    ],
+    [
+        { k: 'Caps', cls: 'wide-caps', i18n: 'key-caps' }, { k: 'a', c: '#ef4444' }, { k: 's', c: '#f97316' },
+        { k: 'd', c: '#eab308' }, { k: 'f', c: '#22c55e', home: true }, { k: 'g', c: '#22c55e' },
+        { k: 'h', c: '#14b8a6' }, { k: 'j', c: '#14b8a6', home: true }, { k: 'k', c: '#3b82f6' },
+        { k: 'l', c: '#8b5cf6' }, { k: ';', c: '#ec4899' }, { k: "'", c: '#ec4899' },
+        { k: 'Enter', cls: 'wide-enter', c: '#ec4899', i18n: 'key-enter' }
+    ],
+    [
+        { k: 'Shift', cls: 'wide-shift', i18n: 'key-shift' }, { k: 'z', c: '#ef4444' }, { k: 'x', c: '#f97316' },
+        { k: 'c', c: '#eab308' }, { k: 'v', c: '#22c55e' }, { k: 'b', c: '#22c55e' }, { k: 'n', c: '#14b8a6' },
+        { k: 'm', c: '#14b8a6' }, { k: ',', c: '#3b82f6' }, { k: '.', c: '#8b5cf6' }, { k: '/', c: '#ec4899' },
+        { k: 'Shift', cls: 'wide-shift', i18n: 'key-shift' }
+    ],
+    [
+        { k: 'Space', cls: 'wide-space', c: '#6366f1', i18n: 'key-space' }
+    ]
+];
+
+function renderKeyboard(selector) {
+    const containers = document.querySelectorAll(selector);
+    if (containers.length === 0) return;
+
+    containers.forEach(container => {
+        container.innerHTML = '';
+        KEYBOARD_DATA.forEach((row, index) => {
             const rowDiv = document.createElement('div');
-            rowDiv.className = `keyboard-row row-${rowIndex + 1}`;
+            rowDiv.className = `keyboard-row row-${index + 1}`;
             
-            row.forEach((key, colIndex) => {
+            row.forEach(keyData => {
                 const keyDiv = document.createElement('div');
-                keyDiv.className = 'virtual-key';
+                keyDiv.className = `key ${keyData.cls || ''}`;
+                if (keyData.c) keyDiv.style.borderTop = `2px solid ${keyData.c}`;
+                if (keyData.home) keyDiv.style.borderBottom = `3px solid #a78bfa`;
+                if (keyData.i18n) keyDiv.setAttribute('data-i18n', keyData.i18n);
                 
-                const lang = userProgress.currentLanguage;
-                let displayKey = key;
-                
-                // Add width classes and localized labels
-                if (key === 'Tab') {
-                    keyDiv.classList.add('wide-tab');
-                    displayKey = i18n[lang]["key-tab"] || key;
-                } else if (key === 'Caps') {
-                    keyDiv.classList.add('wide-caps');
-                    displayKey = i18n[lang]["key-caps"] || key;
-                } else if (key === 'Shift') {
-                    keyDiv.classList.add('wide-shift');
-                    displayKey = i18n[lang]["key-shift"] || key;
-                } else if (key === 'Back') {
-                    keyDiv.classList.add('wide-backspace');
-                    displayKey = i18n[lang]["key-back"] || key;
-                } else if (key === 'Enter') {
-                    keyDiv.classList.add('wide-enter');
-                    displayKey = i18n[lang]["key-enter"] || key;
-                } else if (key === 'Space') {
-                    keyDiv.classList.add('wide-space');
-                    displayKey = i18n[lang]["key-space"] || key;
-                }
-                
-                keyDiv.textContent = displayKey;
-                keyDiv.setAttribute('data-key', key.toLowerCase());
-                
-                // Finger colors (exclude special keys for color guide consistency if needed, or color them)
-                const isSpecial = ['Tab', 'Caps', 'Shift', 'Back', 'Enter', 'Space'].includes(key);
-                if (!isSpecial) {
-                    const colColors = [
-                        '#ef4444','#ef4444','#f97316','#eab308','#22c55e','#22c55e',
-                        '#14b8a6','#14b8a6','#3b82f6','#8b5cf6','#ec4899','#ec4899','#ec4899'
-                    ];
-                    // Adjust color index for rows with special keys at start
-                    let colorIdx = colIndex;
-                    if (rowIndex === 1 || rowIndex === 2 || rowIndex === 3) colorIdx -= 1; // shift index because of Tab/Caps/Shift at start
-                    
-                    const color = colColors[Math.max(colorIdx, 0)];
-                    keyDiv.style.borderTop = `2px solid ${color}`;
-                } else if (key === 'Space') {
-                     keyDiv.style.borderTop = `2px solid #6366f1`; // thumb color
-                }
-                
-                // Highlight home keys
-                if (['f', 'j', 'ب', 'ل', 'ا'].includes(key)) {
-                    keyDiv.style.borderBottom = '3px solid #a78bfa';
-                }
-                
+                keyDiv.textContent = keyData.k;
                 rowDiv.appendChild(keyDiv);
             });
-            
-            virtualKeyboard.appendChild(rowDiv);
+            container.appendChild(rowDiv);
         });
-    }
+    });
     
-    renderKeyboard(userProgress.currentLanguage);
+    if (typeof updateUITexts === 'function') updateUITexts();
+}
+
+function setupPhysicalKeyboardSync() {
+    const handler = (e, isDown) => {
+        let key = e.key;
+        if (key === ' ') key = 'Space';
+        if (key === 'Backspace') key = 'Back';
+        if (key === 'Enter') key = 'Enter';
+        if (key === 'Tab') key = 'Tab';
+        if (key === 'CapsLock') key = 'Caps';
+        if (key === 'Shift') key = 'Shift';
+
+        const virtualKeys = document.querySelectorAll(`.virtual-key, .key`);
+        virtualKeys.forEach(vk => {
+            const vkText = vk.textContent.trim().toLowerCase();
+            const vkData = vk.getAttribute('data-key');
+            if (vkText === key.toLowerCase() || vkData === key.toLowerCase()) {
+                vk.classList[isDown ? 'add' : 'remove']('pressed');
+            }
+        });
+    };
+
+    window.addEventListener('keydown', (e) => handler(e, true));
+    window.addEventListener('keyup', (e) => handler(e, false));
 }
 
 // ==================== توليد نص جديد للتمرين ====================
@@ -1209,6 +1557,10 @@ function startTypingExercise() {
     
     startTimer();
     
+    // التهيئة البصرية للنص
+    highlightTextState();
+    highlightNextKey(currentExercise.targetText[0]);
+    
     typingArea.addEventListener('input', handleTyping);
     
     document.getElementById('exerciseResults').style.display = 'none';
@@ -1216,34 +1568,38 @@ function startTypingExercise() {
 
 // ==================== معالجة الكتابة ====================
 function handleTyping(e) {
-    if (!currentExercise.active) return;
-    
     const userInput = e.target.value;
     const targetText = currentExercise.targetText;
     
     currentExercise.totalKeystrokes++;
     
-    const lastChar = userInput[userInput.length - 1];
-    const targetChar = targetText[userInput.length - 1];
-    
-    if (lastChar !== targetChar) {
-        currentExercise.errors++;
-        highlightError(userInput.length - 1);
+    // حساب الأخطاء بشكل تراكمي أدق
+    let currentMistakes = 0;
+    for (let i = 0; i < userInput.length; i++) {
+        if (userInput[i] !== targetText[i]) {
+            currentMistakes++;
+        }
     }
+    currentExercise.errors = currentMistakes;
     
-    currentExercise.accuracy = Math.max(0, 100 - (currentExercise.errors / currentExercise.totalKeystrokes * 100));
+    // تحديث الدقة: (الضغطات الصحيحة / إجمالي الضغطات)
+    // أو بشكل أبسط: ((طول النص المكتوب - الأخطاء) / طول النص المكتوب)
+    const accuracy = userInput.length > 0 ? 
+        Math.max(0, Math.round(((userInput.length - currentMistakes) / userInput.length) * 100)) : 100;
+    currentExercise.accuracy = accuracy;
     
-    if (currentExercise.totalKeystrokes % 10 === 0) {
-        updateSpeed();
-    }
-    
+    updateSpeed();
     updateExerciseStats();
+    highlightTextState();
     
-    if (userInput.length === targetText.length) {
+    if (userInput.length > 0) {
+        highlightKey(userInput[userInput.length - 1]);
+    }
+    highlightNextKey(targetText[userInput.length]);
+
+    if (userInput.length >= targetText.length) {
         completeExercise();
     }
-    
-    highlightKey(lastChar);
 }
 
 // ==================== إضاءة المفتاح ====================
@@ -1257,18 +1613,46 @@ function highlightKey(key) {
     });
 }
 
-// ==================== تمييز الخطأ ====================
-function highlightError(position) {
-    const targetText = document.getElementById('targetText');
-    const text = targetText.textContent;
-    const highlightedText = text.split('').map((char, index) => {
-        if (index === position) {
-            return `<span class="error-char">${char}</span>`;
-        }
-        return char;
-    }).join('');
+// ==================== تمييز الخطأ والحرف النشط ====================
+function highlightTextState(position) {
+    const targetDisplay = document.getElementById('targetText');
+    if (!targetDisplay) return;
+
+    const targetText = currentExercise.targetText;
+    const userInput = document.getElementById('typingArea').value;
     
-    targetText.innerHTML = highlightedText;
+    let highlighted = '';
+    for (let i = 0; i < targetText.length; i++) {
+        let charClass = '';
+        if (i < userInput.length) {
+            charClass = userInput[i] === targetText[i] ? 'correct-char' : 'error-char';
+        } else if (i === userInput.length) {
+            charClass = 'active-char';
+        }
+        highlighted += `<span class="${charClass}">${targetText[i]}</span>`;
+    }
+    
+    targetDisplay.innerHTML = highlighted;
+}
+
+// ==================== إضاءة المفتاح التالي ====================
+function highlightNextKey(char) {
+    // إزالة التمييز السابق
+    document.querySelectorAll('.virtual-key, .key').forEach(k => k.classList.remove('next-key-highlight'));
+    
+    if (!char) return;
+
+    const virtualKeys = document.querySelectorAll('.virtual-key, .key');
+    const normalizedChar = char === ' ' ? 'space' : char.toLowerCase();
+    
+    virtualKeys.forEach(k => {
+        const kText = k.textContent.trim().toLowerCase();
+        const kData = k.getAttribute('data-key');
+        
+        if (kText === normalizedChar || kData === normalizedChar) {
+            k.classList.add('next-key-highlight');
+        }
+    });
 }
 
 // ==================== تحديث إحصائيات التمرين ====================
@@ -1296,9 +1680,16 @@ function startTimer() {
 // ==================== تحديث السرعة ====================
 function updateSpeed() {
     const timePassed = (new Date() - currentExercise.startTime) / 1000 / 60;
-    const wordsTyped = currentExercise.totalKeystrokes / 5;
-    currentExercise.speed = wordsTyped / timePassed;
-    document.getElementById('currentSpeed').textContent = Math.round(currentExercise.speed);
+    if (timePassed <= 0) return;
+
+    // WPM = (Total characters typed / 5) / time in minutes
+    // Net WPM = ((Total - Errors) / 5) / time
+    const grossWpm = (currentExercise.totalKeystrokes / 5) / timePassed;
+    const netWpm = Math.max(0, ((currentExercise.totalKeystrokes - currentExercise.errors) / 5) / timePassed);
+    
+    currentExercise.speed = Math.round(netWpm);
+    const speedEl = document.getElementById('currentSpeed');
+    if (speedEl) speedEl.textContent = currentExercise.speed;
 }
 
 // ==================== إكمال التمرين ====================
@@ -1316,7 +1707,7 @@ function completeExercise() {
     updateAfterExercise(
         currentExercise.accuracy, 
         currentExercise.speed, 
-        currentExercise.mistakes || 0,
+        currentExercise.errors || 0,
         currentExercise.isLesson || false
     );
     
@@ -1362,7 +1753,8 @@ function displayResults(points) {
 
 // ==================== تحديث نقاط المستخدم ====================
 function updateUserPoints() {
-    updateStatsUI(); // النظام الجديد يضم النقاط في updateStatsUI
+    updateStatsUI();
+    updateProgressStats();
 }
 
 // تم استبدال النظام القديم للإنجازات بالنظام الجديد التفاعلي
@@ -1394,7 +1786,7 @@ function loadLessons() {
             </div>
             <div class="lesson-footer">
                 <span class="lesson-points">+${lesson.points} ${currentLang === 'arabic' ? 'نقطة' : 'points'}</span>
-                <button class="btn lesson-btn" onclick="startLesson(${lesson.id})" 
+                <button class="btn lesson-btn" data-lesson-id="${lesson.id}" 
                     ${userProgress.lessons.completed.includes(lesson.id) ? 'disabled' : ''}>
                     ${userProgress.lessons.completed.includes(lesson.id) 
                         ? (currentLang === 'arabic' ? '✓ مكتمل' : '✓ Completed') 
@@ -1418,7 +1810,7 @@ function startLesson(lessonId) {
 function filterLessons(level) {
     const tabs = document.querySelectorAll('.level-tab');
     tabs.forEach(tab => {
-        if (tab.getAttribute('onclick').includes(`'${level}'`)) {
+        if (tab.dataset.level === level) {
             tab.classList.add('active');
         } else {
             tab.classList.remove('active');
@@ -1435,17 +1827,45 @@ function filterLessons(level) {
     });
 }
 
-// ==================== تهيئة الرسوم البيانية ====================
-function initCharts() {
-    if (!document.getElementById('speedChart')) return;
+// إضافة مستمعات للأحداث للتبويبات وأزرار الدروس
+document.addEventListener('click', function(e) {
+    // تصفية الدروس
+    if (e.target.classList.contains('level-tab')) {
+        const level = e.target.dataset.level;
+        if (level) filterLessons(level);
+    }
     
-    const speedCtx = document.getElementById('speedChart').getContext('2d');
+    // بدء الدرس
+    const lessonBtn = e.target.closest('.lesson-btn');
+    if (lessonBtn && !lessonBtn.disabled) {
+        const lessonId = parseInt(lessonBtn.dataset.lessonId);
+        if (lessonId) startLesson(lessonId);
+    }
+});
+
+// ==================== تهيئة الرسوم البيانية ====================
+// تخزين مثيلات الرسوم البيانية لمنع تسرب الذاكرة
+let chartInstances = {
+    speed: null,
+    accuracy: null
+};
+
+function initCharts() {
+    const speedCanvas = document.getElementById('speedChart');
+    const accuracyCanvas = document.getElementById('accuracyChart');
+    if (!speedCanvas || !accuracyCanvas) return;
+    
+    // تدمير الرسوم البيانية القديمة إذا وجدت
+    if (chartInstances.speed) chartInstances.speed.destroy();
+    if (chartInstances.accuracy) chartInstances.accuracy.destroy();
+    
+    const speedCtx = speedCanvas.getContext('2d');
     const lang = userProgress.currentLanguage;
     const translations = i18n[lang];
     const labelPrefix = lang === 'arabic' ? 'تمرين' : 'Exercise';
 
     const history = userProgress.lessons.lessonsHistory;
-    new Chart(speedCtx, {
+    chartInstances.speed = new Chart(speedCtx, {
         type: 'line',
         data: {
             labels: history.map((item, index) => `${labelPrefix} ${index + 1}`),
@@ -1454,22 +1874,53 @@ function initCharts() {
                 data: history.map(item => item.speed),
                 borderColor: '#667eea',
                 backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                tension: 0.4
+                tension: 0.4,
+                pointRadius: 6,
+                pointHoverRadius: 10,
+                pointBackgroundColor: '#667eea',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2
             }]
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
             plugins: {
                 legend: {
                     position: 'top',
+                    labels: { color: '#94a3b8', font: { family: 'Cairo', size: 12 } }
+                },
+                tooltip: {
+                    enabled: true,
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                    titleFont: { family: 'Cairo', size: 14 },
+                    bodyFont: { family: 'Cairo', size: 13 },
+                    padding: 12,
+                    cornerRadius: 8,
+                    displayColors: true
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                    ticks: { color: '#64748b', font: { family: 'Outfit' } }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#64748b', font: { family: 'Outfit' } }
                 }
             }
         }
     });
     
-    const accuracyCtx = document.getElementById('accuracyChart').getContext('2d');
+    const accuracyCtx = accuracyCanvas.getContext('2d');
     // Removed redeclaration of history
-    new Chart(accuracyCtx, {
+    chartInstances.accuracy = new Chart(accuracyCtx, {
         type: 'line',
         data: {
             labels: history.map((item, index) => `${labelPrefix} ${index + 1}`),
@@ -1478,14 +1929,45 @@ function initCharts() {
                 data: history.map(item => item.accuracy),
                 borderColor: '#48bb78',
                 backgroundColor: 'rgba(72, 187, 120, 0.1)',
-                tension: 0.4
+                tension: 0.4,
+                pointRadius: 6,
+                pointHoverRadius: 10,
+                pointBackgroundColor: '#48bb78',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2
             }]
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
             plugins: {
                 legend: {
                     position: 'top',
+                    labels: { color: '#94a3b8', font: { family: 'Cairo', size: 12 } }
+                },
+                tooltip: {
+                    enabled: true,
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                    titleFont: { family: 'Cairo', size: 14 },
+                    bodyFont: { family: 'Cairo', size: 13 },
+                    padding: 12,
+                    cornerRadius: 8,
+                    displayColors: true
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                    ticks: { color: '#64748b', font: { family: 'Outfit' } }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#64748b', font: { family: 'Outfit' } }
                 }
             }
         }
@@ -1497,73 +1979,110 @@ function initCharts() {
 // ==================== تحديث إحصائيات التقدم ====================
 function updateProgressStats() {
     const history = userProgress.lessons.lessonsHistory;
+    let avgSpeedVal = 0;
+    
     if (history.length > 0) {
-        const avgSpeed = history.reduce((sum, item) => sum + item.speed, 0) / history.length;
+        avgSpeedVal = history.reduce((sum, item) => sum + item.speed, 0) / history.length;
         const avgAccuracy = history.reduce((sum, item) => sum + item.accuracy, 0) / history.length;
         
         const avgSpeedEl = document.getElementById('avgSpeed');
-        if (avgSpeedEl) avgSpeedEl.textContent = Math.round(avgSpeed);
+        if (avgSpeedEl) avgSpeedEl.textContent = Math.round(avgSpeedVal);
         
         const avgAccuracyEl = document.getElementById('avgAccuracy');
         if (avgAccuracyEl) avgAccuracyEl.textContent = Math.round(avgAccuracy);
+    } else {
+        // استخدام القيم الإحصائية الأساسية إذا لم يوجد تاريخ
+        avgSpeedVal = userProgress.stats.speed || userProgress.stats.bestSpeed || 0;
     }
     
-    const avgSpeed = parseInt(document.getElementById('avgSpeed').textContent);
     let levelKey = 'tab-beginner';
-    if (avgSpeed > 40) levelKey = 'tab-intermediate';
-    if (avgSpeed > 60) levelKey = 'tab-advanced';
+    if (avgSpeedVal > 40) levelKey = 'tab-intermediate';
+    if (avgSpeedVal > 60) levelKey = 'tab-advanced';
     
-    const lessonsCount = document.getElementById('completedCount');
-    if (lessonsCount) lessonsCount.textContent = Array.isArray(userProgress.lessons.completed) ? userProgress.lessons.completed.length : userProgress.lessons.completed;
+    const lessonsCountElements = document.querySelectorAll('.completed-count-val');
+    lessonsCountElements.forEach(el => {
+        el.textContent = userProgress.lessons.completed.length;
+    });
     
     const userLevel = document.getElementById('userLevel');
     if (userLevel) userLevel.textContent = i18n[userProgress.currentLanguage][levelKey];
+
+    // تحديث وقت التدريب بالساعات
+    const totalTimeEl = document.getElementById('totalTime');
+    if (totalTimeEl) {
+        const hours = (userProgress.sessions.totalPlayTime / 3600).toFixed(2);
+        totalTimeEl.textContent = hours;
+    }
+
+    // تحديث إحصائيات إضافية
+    const perfectEl = document.getElementById('perfectExercises');
+    if (perfectEl) perfectEl.textContent = userProgress.stats.perfectExercises || 0;
+
+    const wordsEl = document.getElementById('totalWords');
+    if (wordsEl) wordsEl.textContent = userProgress.stats.totalWords || 0;
 }
 
-// ==================== تحميل الإنجازات ====================
-function loadAchievements() {
-    const achievementsList = document.getElementById('achievementsList');
-    if (!achievementsList) return;
-    
-    const lang = userProgress.currentLanguage === 'arabic' ? 'ar' : 'en';
-    
-    achievementsList.innerHTML = achievementsData.map(ach => {
-        const isEarned = userProgress.achievements[ach.id];
-        return `
-            <div class="achievement-card ${isEarned ? 'earned' : 'locked'}">
-                <div class="achievement-icon">${ach.icon}</div>
-                <div class="achievement-info">
-                    <h4>${ach.name[lang]}</h4>
-                    <p>${ach.desc[lang]}</p>
-                    ${isEarned ? '<span class="achievement-badge">✓</span>' : ''}
-                </div>
+/* ======================================================
+   LECO Keyboard — Dark Premium Theme
+   Project developed by Mohamed Ahmed Al-Bashir
+   All rights reserved © 2026
+   Color Palette: Deep Navy + Indigo + Violet Accents
+   ====================================================== */
+
+console.log("LECO Keyboard System Initialized - Developed by Mohamed Ahmed Al-Bashir");
+
+// ==================== إعادة تعيين التقدم ====================
+function resetProgress() {
+    const lang = userProgress.currentLanguage;
+    const confirmMsg = lang === 'arabic' ? 
+        "هل أنت متأكد من حذف كافة البيانات؟ لا يمكن التراجع عن هذه الخطوة." : 
+        "Are you sure you want to delete all data? This action cannot be undone.";
+        
+    if (confirm(confirmMsg)) {
+        localStorage.removeItem('leco_user_progress');
+        localStorage.removeItem('typingPoints');
+        localStorage.removeItem('speedHistory');
+        localStorage.removeItem('accuracyHistory');
+        localStorage.removeItem('achievements');
+        localStorage.removeItem('completedLessons');
+        location.reload();
+    }
+}
+
+// تم دمج loadAchievements مع updateAchievementsUI
+
+// ==================== تحميل الشارات ====================
+function loadBadges() {
+    const container = document.getElementById('badgesList');
+    if (!container) return;
+
+    container.innerHTML = '';
+    const lang = userProgress.currentLanguage;
+    const displayLang = lang === 'arabic' ? 'ar' : 'en';
+
+    badgesData.forEach(badge => {
+        const isEarned = userProgress.lessons.completed.length >= badge.requirement;
+        const card = document.createElement('div');
+        card.className = `achievement-card ${isEarned ? 'earned' : 'locked'}`;
+        
+        card.innerHTML = `
+            <div class="achievement-icon">${badge.icon}</div>
+            <div class="achievement-info">
+                <h4>${badge.name[displayLang]}</h4>
+                <p>${isEarned ? (lang === 'arabic' ? 'تم الحصول عليها' : 'Earned') : (lang === 'arabic' ? 'قيد التقدم' : 'In Progress')}</p>
             </div>
         `;
-    }).join('');
+        container.appendChild(card);
+    });
 }
 
 // ==================== حفظ ومتابعة ====================
 function saveAndContinue() {
-    // إضافة لدرس للتاريخ
-    userProgress.lessons.lessonsHistory.push({
-        date: new Date().toLocaleDateString(),
-        accuracy: currentExercise.accuracy,
-        speed: currentExercise.speed,
-        lessonId: currentExercise.lessonId || null
-    });
-
-    if (currentExercise.isLesson && currentExercise.lessonId) {
-        // إذا كان درساً، نعتبره مكتملاً
-        if (!userProgress.lessons.completed.includes(currentExercise.lessonId)) {
-            userProgress.lessons.completed.push(currentExercise.lessonId);
-        }
-    }
-    
-    saveGameProgress();
+    // تم نقل الحفظ التلقائي لتاريخ التمارين إلى updateAfterExercise
     
     if (confirm(userProgress.currentLanguage === 'arabic' ? 
-                'تم حفظ تقدمك. هل تريد العودة لقائمة الدروس؟' : 
-                'Your progress has been saved. Do you want to return to the lessons list?')) {
+                'تم حفظ تقدمك تلقائياً. هل تريد العودة لقائمة الدروس؟' : 
+                'Your progress has been saved automatically. Do you want to return to the lessons list?')) {
         window.location.href = 'lessons.html';
     } else {
         document.getElementById('exerciseResults').style.display = 'none';
