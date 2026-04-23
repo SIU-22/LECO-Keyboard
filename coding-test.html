@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Mohamed Ahmed Al-Bashir">
+    <meta name="developer" content="Mohamed Ahmed Al-Bashir">
+    <meta name="copyright" content="Mohamed Ahmed Al-Bashir">
+    <title>اختبار البرمجة - LECO Keyboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .coding-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            border: 1px solid var(--border);
+        }
+        .editor-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .code-input-area {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .code-input-area textarea {
+            width: 100%;
+            height: 300px;
+            background: #1a1a2e;
+            color: #e0e0e0;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            resize: none;
+            outline: none;
+        }
+        .output-area {
+            background: #0f172a;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 5px;
+            color: var(--text-secondary);
+        }
+        #outputConsole {
+            flex-grow: 1;
+            color: #4ade80;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            max-height: 250px;
+        }
+        .coding-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .lang-select-wrapper {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        select.lang-selector {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            padding: 10px 40px 10px 20px;
+            background: var(--bg-input) url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236366f1%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E") no-repeat;
+            background-position: left 15px top 50%;
+            background-size: 12px auto;
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        select.lang-selector:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+            transform: translateY(-1px);
+        }
+
+        select.lang-selector:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+        }
+        
+        html[dir="ltr"] select.lang-selector {
+            padding: 10px 20px 10px 40px;
+            background-position: right 15px top 50%;
+        }
+        #previewFrame {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border: none;
+            border-radius: var(--radius-sm);
+        }
+        .output-area {
+            background: #0f172a;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            min-height: 300px;
+        }
+        .code-challenge {
+            background: var(--bg-elevated);
+            padding: 20px;
+            border-radius: var(--radius-md);
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary);
+            white-space: pre-line;
+            line-height: 1.6;
+        }
+        .code-challenge h4 { margin-bottom: 10px; color: var(--accent); }
+
+        @media (max-width: 768px) {
+            .editor-wrapper {
+                grid-template-columns: 1fr;
+            }
+            .code-input-area textarea {
+                height: 250px;
+            }
+            .output-area {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="logo">
+                    <img src="img/SIU.png" alt=" LECO Keyboard" style="height: 40px; width: auto; margin-left: 10px;">
+                    <span>LECO Keyboard</span>
+                </div>
+                <button class="menu-toggle" id="mobile-menu-toggle" aria-label="فتح القائمة">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <ul class="nav-menu">
+                    <li><a href="index.html" id="nav-home" data-i18n="nav-home">الرئيسية</a></li>
+                    <li><a href="lessons.html" id="nav-lessons" data-i18n="nav-lessons">الدروس</a></li>
+                    <li><a href="exercises.html" id="nav-exercises" data-i18n="nav-exercises">تمارين تفاعلية</a></li>
+                    <li><a href="progress.html" id="nav-progress" data-i18n="nav-progress">تقدمي</a></li>
+                    <li><a href="coding-test.html" id="nav-coding" data-i18n="nav-coding" class="active">اختبار البرمجة</a></li>
+                    <li><a href="programming.html" id="nav-programming" data-i18n="nav-programming">تعلم البرمجة</a></li>
+                    <li><a href="about.html" id="nav-about" data-i18n="nav-about">عن الموقع</a></li>
+                </ul>
+                <div class="language-selector">
+                    <button id="languageToggle" class="lang-toggle-btn">
+                        <i class="fas fa-globe"></i>
+                        <span id="currentLangText">العربية</span>
+                    </button>
+                </div>
+                <div class="user-stats" id="userStats">
+                    <span><i class="fas fa-star"></i> <span class="user-points-val">0</span> <span data-i18n="points-label">نقطة</span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <h2 data-i18n="coding-test-title">اختبار البرمجة التفاعلي</h2>
+                <p data-i18n="coding-test-desc">اكتب الكود وجربه مباشرة هنا</p>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="coding-container">
+                <div class="code-challenge" id="challengeBox">
+                    <h4 id="challengeTitle">التحدي الأول: الطباعة</h4>
+                    <p id="challengeDesc">اكتب كود يقوم بطباعة جملة "Hello World" باستخدام دالة console.log()</p>
+                </div>
+
+                <div class="lang-select-wrapper">
+                    <label for="langSelect" data-i18n="select-lang">اختر اللغة:</label>
+                    <select id="langSelect" class="lang-selector">
+                        <option value="javascript">JavaScript</option>
+                        <option value="html">HTML</option>
+                        <option value="css">CSS</option>
+                        <option value="python">Python</option>
+                        <option value="java">Java</option>
+                        <option value="cpp">C++</option>
+                        <option value="php">PHP</option>
+                    </select>
+                </div>
+
+                <div class="editor-wrapper">
+                    <div class="code-input-area">
+                        <label for="codeInput" id="editorLabel">محرر الكود (JavaScript):</label>
+                        <textarea id="codeInput" spellcheck="false">console.log("Hello World");</textarea>
+                    </div>
+                    <div class="output-area">
+                        <div class="output-header">
+                            <span id="outputLabel">المخرجات (Console)</span>
+                            <button class="btn" style="padding: 4px 12px; font-size: 0.8rem; box-shadow: none;" onclick="clearConsole()">مسح</button>
+                        </div>
+                        <div id="outputConsole" style="display: block;">> Ready...</div>
+                        <iframe id="previewFrame" style="display: none;"></iframe>
+                    </div>
+                </div>
+
+                <div class="coding-controls">
+                    <button class="btn" id="runCodeBtn">تشغيل الكود <i class="fas fa-play"></i></button>
+                    <button class="btn" id="nextChallengeBtn" style="background: var(--bg-elevated); box-shadow: none; display: none;">التحدي التالي <i class="fas fa-arrow-left"></i></button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer data-i18n="footer-rights">
+        <div class="container">
+            <p>© 2026 محمد أحمد البشير — بكل فخر، نسخر شغفنا لنرتقي بمجتمع المبرمجين إلى آفاقٍ جديدة. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+
+    <script src="typing.js"></script>
+    <script>
+        /**
+         * LECO Keyboard - Coding Test Logic
+         * Developed by: Mohamed Ahmed Al-Bashir
+         * 
+         * This script manages the interactive code editor, multi-language execution,
+         * and the challenge validation system.
+         */
+
+        // --- Coding Challenges Database ---
+        const challenges = {
+            javascript: [
+                {
+                    title: { ar: "JS: جملة الطباعة", en: "JS: Print Statement" },
+                    desc: { ar: "قم بطباعة 'Hello World' في وحدة التحكم.", en: "Print 'Hello World' to the console." },
+                    example: "console.log('...');",
+                    requirements: { ar: "استخدام console.log", en: "Use console.log" },
+                    expected: "Hello World",
+                    solution: /console\.log\(['"]Hello World['"]\)/i
+                },
+                {
+                    title: { ar: "JS: الجمع", en: "JS: Addition" },
+                    desc: { ar: "قم بجمع الرقمين 10 و 20 وطباعة الناتج.", en: "Add 10 and 20 and print the result." },
+                    example: "console.log(10 + 20);",
+                    requirements: { ar: "استخدام العملية +", en: "Use + operator" },
+                    expected: "30",
+                    solution: /console\.log\(10\s*\+\s*20\)/i
+                },
+                {
+                    title: { ar: "JS: المتغيرات", en: "JS: Variables" },
+                    desc: { ar: "عرف متغير باسم name واجعل قيمته 'LECO' ثم اطبعه.", en: "Define a variable 'name' with value 'LECO' and print it." },
+                    example: "let x = '...';",
+                    requirements: { ar: "تعريف متغير وطباعته", en: "Define and print a variable" },
+                    expected: "LECO",
+                    solution: /(let|const|var)\s+name\s*=\s*['"]LECO['"].*console\.log\(name\)/is
+                }
+            ],
+            python: [
+                {
+                    title: { ar: "Python: الطباعة", en: "Python: Print" },
+                    desc: { ar: "اطبع جملة 'Welcome to Python'.", en: "Print 'Welcome to Python'." },
+                    example: "print('...')",
+                    requirements: { ar: "استخدام دالة print", en: "Use print function" },
+                    expected: "Welcome to Python",
+                    solution: /print\(['"]Welcome to Python['"]\)/i
+                },
+                {
+                    title: { ar: "Python: العمليات", en: "Python: Math" },
+                    desc: { ar: "اطبع ناتج ضرب 5 في 5.", en: "Print 5 multiplied by 5." },
+                    example: "print(5 * 5)",
+                    requirements: { ar: "استخدام معامل الضرب *", en: "Use * operator" },
+                    expected: "25",
+                    solution: /print\(5\s*\*\s*5\)/i
+                }
+            ],
+            java: [
+                {
+                    title: { ar: "Java: الطباعة", en: "Java: Print" },
+                    desc: { ar: "اكتب كود لطباعة 'Hello Java'.", en: "Write code to print 'Hello Java'." },
+                    example: "System.out.println('...');",
+                    requirements: { ar: "استخدام System.out.println", en: "Use System.out.println" },
+                    expected: "Hello Java",
+                    solution: /System\.out\.println\(['"]Hello Java['"]\)/i
+                }
+            ],
+            php: [
+                {
+                    title: { ar: "PHP: المخرجات", en: "PHP: Output" },
+                    desc: { ar: "استخدم echo لطباعة 'PHP is Fun'.", en: "Use echo to print 'PHP is Fun'." },
+                    example: "echo '...';",
+                    requirements: { ar: "استخدام كلمة echo", en: "Use echo keyword" },
+                    expected: "PHP is Fun",
+                    solution: /echo\s+['"]PHP is Fun['"]/i
+                }
+            ],
+            html: [
+                {
+                    title: { ar: "HTML: العناوين", en: "HTML: Headings" },
+                    desc: { ar: "أضف عنوان h1 بعنوان 'LECO Platform'.", en: "Add an h1 tag with 'LECO Platform'." },
+                    example: "<h1>...</h1>",
+                    requirements: { ar: "وسم h1 صحيح", en: "Valid h1 tag" },
+                    expected: "<h1>LECO Platform</h1>",
+                    solution: /<h1>LECO Platform<\/h1>/i
+                },
+                {
+                    title: { ar: "HTML: الفقرات", en: "HTML: Paragraphs" },
+                    desc: { ar: "أضف فقرة p تحتوي على نص من اختيارك.", en: "Add a p tag with any text." },
+                    example: "<p>...</p>",
+                    requirements: { ar: "وسم p صحيح", en: "Valid p tag" },
+                    expected: "<p>...</p>",
+                    solution: /<p>.*<\/p>/i
+                }
+            ],
+            css: [
+                {
+                    title: { ar: "CSS: الألوان", en: "CSS: Colors" },
+                    desc: { ar: "اجعل لون النص في h1 أزرق (blue).", en: "Set h1 text color to blue." },
+                    example: "h1 { color: ...; }",
+                    requirements: { ar: "خاصية color", en: "color property" },
+                    expected: "color: blue",
+                    solution: /h1\s*\{\s*color:\s*blue;?\s*\}/i
+                }
+            ],
+            cpp: [
+                {
+                    title: { ar: "C++: الطباعة", en: "C++: Print" },
+                    desc: { ar: "اطبع جملة 'Hello C++' باستخدام cout.", en: "Print 'Hello C++' using cout." },
+                    example: "cout << '...';",
+                    requirements: { ar: "استخدام cout", en: "Use cout" },
+                    expected: "Hello C++",
+                    solution: /cout\s*<<\s*['"]Hello C\+\+['"]/i
+                }
+            ]
+        };
+
+        let currentIdx = 0; // Tracks the current challenge index in the active category
+
+        const langSelect = document.getElementById('langSelect');
+        const editorLabel = document.getElementById('editorLabel');
+        const outputLabel = document.getElementById('outputLabel');
+        const outputConsole = document.getElementById('outputConsole');
+        const previewFrame = document.getElementById('previewFrame');
+        const codeInput = document.getElementById('codeInput');
+
+        const defaultCodes = {
+            javascript: 'console.log("Hello from JavaScript!");',
+            html: '<h1>Hello World</h1>\n<p>This is a live HTML preview.</p>',
+            css: 'body {\n  background-color: #f0f0f0;\n  color: #333;\n  font-family: sans-serif;\n}\nh1 { color: #6366f1; }',
+            python: 'print("Hello from Python simulation!")\nx = 10\ny = 20\nprint(f"Sum: {x + y}")',
+            java: 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello from Java simulation!");\n    }\n}',
+            cpp: '#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello from C++ simulation!" << endl;\n    return 0;\n}',
+            php: '<?php\necho "Hello from PHP simulation!";\n?>'
+        };
+
+        // --- Core Events ---
+
+        langSelect.addEventListener('change', function() {
+            const lang = this.value;
+            editorLabel.textContent = `محرر الكود (${lang.toUpperCase()}):`;
+            codeInput.value = defaultCodes[lang] || "";
+            
+            if (['html', 'css', 'javascript'].includes(lang)) {
+                outputLabel.textContent = "المعاينة الحية (Preview)";
+                outputConsole.style.display = "none";
+                previewFrame.style.display = "block";
+            } else {
+                outputLabel.textContent = "المخرجات (Console)";
+                outputConsole.style.display = "block";
+                previewFrame.style.display = "none";
+            }
+            
+            // Randomize challenge on language change
+            const currentChalls = challenges[lang] || [];
+            if (currentChalls.length > 0) {
+                currentIdx = Math.floor(Math.random() * currentChalls.length);
+            }
+            updateChallenge();
+        });
+
+        /**
+         * Renders the current challenge info with full metadata.
+         */
+        function updateChallenge() {
+            const uiLang = userProgress.currentLanguage;
+            const progLang = langSelect.value;
+            const challs = challenges[progLang] || [];
+            const chall = challs[currentIdx] || { 
+                title: {ar: "تحدي حر", en: "Free Practice"}, 
+                desc: {ar: "اكتب وجرب الكود الخاص بك", en: "Write and test your own code"} 
+            };
+            
+            document.getElementById('challengeTitle').textContent = uiLang === 'arabic' ? chall.title.ar : chall.title.en;
+            
+            // Build rich description while keeping the same visual text block
+            let fullDesc = uiLang === 'arabic' ? chall.desc.ar : chall.desc.en;
+            
+            if (chall.example) {
+                fullDesc += (uiLang === 'arabic' ? "\n\n💡 مثال:\n" : "\n\n💡 Example:\n") + chall.example;
+            }
+            if (chall.requirements) {
+                const reqText = uiLang === 'arabic' ? chall.requirements.ar : chall.requirements.en;
+                fullDesc += (uiLang === 'arabic' ? "\n\n📌 المتطلبات:\n" : "\n\n📌 Requirements:\n") + "- " + reqText;
+            }
+            if (chall.expected) {
+                fullDesc += (uiLang === 'arabic' ? "\n\n🎯 المخرج المتوقع:\n" : "\n\n🎯 Expected Output:\n") + chall.expected;
+            }
+
+            document.getElementById('challengeDesc').textContent = fullDesc;
+            
+            const langUpper = progLang.toUpperCase();
+            editorLabel.textContent = uiLang === 'arabic' ? `محرر الكود (${langUpper}):` : `Code Editor (${langUpper}):`;
+            
+            if (['html', 'css'].includes(progLang)) {
+                outputLabel.textContent = uiLang === 'arabic' ? "المعاينة الحية (Preview)" : "Live Preview";
+            } else {
+                outputLabel.textContent = uiLang === 'arabic' ? "المخرجات (Console)" : "Output (Console)";
+            }
+
+            document.getElementById('runCodeBtn').innerHTML = uiLang === 'arabic' ? 'تشغيل الكود <i class="fas fa-play"></i>' : 'Run Code <i class="fas fa-play"></i>';
+            document.getElementById('nextChallengeBtn').innerHTML = uiLang === 'arabic' ? 'التحدي التالي <i class="fas fa-arrow-left"></i>' : 'Next Challenge <i class="fas fa-arrow-right"></i>';
+        }
+
+        /**
+         * Run Button Handler
+         * Executes JS or simulates other languages.
+         */
+        document.getElementById('runCodeBtn').addEventListener('click', function() {
+            const code = codeInput.value;
+            const lang = langSelect.value;
+            const consoleArea = document.getElementById('outputConsole');
+            consoleArea.style.color = "#4ade80";
+
+            if (lang === 'javascript') {
+                handleJSExecution(code, consoleArea);
+            } else if (lang === 'html' || lang === 'css') {
+                handleWebPreview(code, lang);
+            } else {
+                handleSimulation(code, lang, consoleArea);
+            }
+
+            // Reward for interaction
+            userProgress.points += 5;
+            saveGameProgress();
+            updateUserPoints();
+        });
+
+        // --- Logic Handlers ---
+
+        function handleJSExecution(code, consoleArea) {
+            let logs = "";
+            const originalLog = console.log;
+            console.log = function(msg) { logs += "> " + msg + "\n"; };
+            try {
+                eval(code);
+                consoleArea.textContent = logs || "> Code executed successfully (no output)";
+            } catch (err) {
+                consoleArea.style.color = "#f87171";
+                consoleArea.textContent = "> Error: " + err.message;
+            } finally {
+                console.log = originalLog;
+            }
+            checkChallenge(code, 'javascript', consoleArea);
+        }
+
+        function handleWebPreview(code, lang) {
+            const doc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+            doc.open();
+            if (lang === 'html') doc.write(code);
+            else doc.write(`<style>${code}</style><h1>CSS Preview Applied</h1><p>The styles are active in this frame.</p>`);
+            doc.close();
+            checkChallenge(code, lang, null);
+        }
+
+        function handleSimulation(code, lang, consoleArea) {
+            consoleArea.textContent = `> Simulation Mode (${lang.toUpperCase()})\n> Output: \n`;
+            const sims = { 
+                python: "Hello from Python simulation!\nSum: 30", 
+                java: "Hello from Java simulation!", 
+                cpp: "Hello from C++ simulation!",
+                php: "Hello from PHP simulation!" 
+            };
+            consoleArea.textContent += (sims[lang] || "Processing...");
+            checkChallenge(code, lang, consoleArea);
+        }
+
+        function checkChallenge(code, lang, consoleArea) {
+            const currentChalls = challenges[lang] || [];
+            const activeChall = currentChalls[currentIdx];
+            if (activeChall && activeChall.solution.test(code)) {
+                if (consoleArea) {
+                    consoleArea.textContent += (userProgress.currentLanguage === 'arabic' ? "\n\n✅ أحسنت! التحدي اكتمل بنجاح" : "\n\n✅ Well done! Challenge completed");
+                } else {
+                    alert(userProgress.currentLanguage === 'arabic' ? "✅ رائع! لقد نجحت في التحدي" : "✅ Great! You passed the challenge");
+                }
+                userProgress.points += 20;
+                saveGameProgress();
+                updateUserPoints();
+                document.getElementById('nextChallengeBtn').style.display = 'inline-flex';
+                if (typeof unlockAchievement === 'function') unlockAchievement("عاشق البرمجة");
+            }
+        }
+
+
+
+        document.getElementById('nextChallengeBtn').addEventListener('click', function() {
+            const lang = langSelect.value;
+            const challs = challenges[lang] || [];
+            
+            // Randomize next index
+            if (challs.length > 1) {
+                let newIdx = currentIdx;
+                while (newIdx === currentIdx) {
+                    newIdx = Math.floor(Math.random() * challs.length);
+                }
+                currentIdx = newIdx;
+            } else {
+                currentIdx = 0;
+            }
+
+            updateChallenge();
+            this.style.display = 'none';
+            outputConsole.textContent = "> Ready...";
+            outputConsole.style.color = "#4ade80";
+        });
+
+        function clearConsole() {
+            document.getElementById('outputConsole').textContent = "> Console cleared.";
+        }
+
+        // Init language
+        window.addEventListener('load', updateChallenge);
+        document.getElementById('languageToggle').addEventListener('click', () => {
+            setTimeout(updateChallenge, 100);
+        });
+    </script>
+</body>
+</html>
