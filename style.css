@@ -320,10 +320,10 @@ body::after {
     word-break: normal;
     overflow-wrap: break-word;
     font-feature-settings: "liga" 1, "clig" 1;
+    text-rendering: optimizeLegibility;
 }
 
 .test-text span, .target-text span {
-    position: relative;
     transition: all 0.2s;
     display: inline;
     letter-spacing: 0;
@@ -946,6 +946,8 @@ body::after {
     word-break: normal;
     overflow-wrap: break-word;
     font-feature-settings: "liga" 1, "clig" 1;
+    text-rendering: optimizeLegibility;
+    white-space: pre-wrap;
 }
 .target-text[lang="ar"] { direction: rtl; font-size: 1.7rem; }
 .target-text[lang="en"] { direction: ltr; font-family: 'Courier New', monospace; }
