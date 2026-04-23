@@ -1016,7 +1016,9 @@ function startSpeedTest() {
         // حساب الأخطاء والسرعة والدقة
         let currentMistakes = 0;
         let highlighted = '';
-        
+        let currentGroupClass = '';
+        let currentGroupText = '';
+
         for (let i = 0; i < targetText.length; i++) {
             let charClass = '';
             if (i < userText.length) {
@@ -1029,7 +1031,19 @@ function startSpeedTest() {
             } else if (i === userText.length) {
                 charClass = 'active-char';
             }
-            highlighted += `<span class="${charClass}">${targetText[i]}</span>`;
+
+            if (charClass === currentGroupClass) {
+                currentGroupText += targetText[i];
+            } else {
+                if (currentGroupText) {
+                    highlighted += `<span class="${currentGroupClass}">${currentGroupText}</span>`;
+                }
+                currentGroupClass = charClass;
+                currentGroupText = targetText[i];
+            }
+        }
+        if (currentGroupText) {
+            highlighted += `<span class="${currentGroupClass}">${currentGroupText}</span>`;
         }
         
         errors = currentMistakes;
@@ -1622,6 +1636,9 @@ function highlightTextState(position) {
     const userInput = document.getElementById('typingArea').value;
     
     let highlighted = '';
+    let currentGroupClass = '';
+    let currentGroupText = '';
+
     for (let i = 0; i < targetText.length; i++) {
         let charClass = '';
         if (i < userInput.length) {
@@ -1629,7 +1646,19 @@ function highlightTextState(position) {
         } else if (i === userInput.length) {
             charClass = 'active-char';
         }
-        highlighted += `<span class="${charClass}">${targetText[i]}</span>`;
+
+        if (charClass === currentGroupClass) {
+            currentGroupText += targetText[i];
+        } else {
+            if (currentGroupText) {
+                highlighted += `<span class="${currentGroupClass}">${currentGroupText}</span>`;
+            }
+            currentGroupClass = charClass;
+            currentGroupText = targetText[i];
+        }
+    }
+    if (currentGroupText) {
+        highlighted += `<span class="${currentGroupClass}">${currentGroupText}</span>`;
     }
     
     targetDisplay.innerHTML = highlighted;
