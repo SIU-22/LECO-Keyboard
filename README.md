@@ -1,31 +1,31 @@
-# مشروع تعليم الكتابة بالعربي والإنجليزي
+# LECO Keyboard — Dark Premium Typing Trainer
 
-## وصف المشروع
-موقع متكامل لتعليم الكتابة السريعة على لوحة المفاتيح باللغتين العربية والإنجليزية.
+A professional, high-performance web-based typing trainer designed to help users master touch typing in both Arabic and English.
 
-## المميزات
-- دعم كامل للغتين العربية والإنجليزية
-- 5 صفحات متكاملة
-- تمارين تفاعلية مع تصحيح فوري
-- نظام نقاط وإنجازات
-- إحصائيات وتتبع للتقدم
-- تصميم متجاوب مع جميع الأجهزة
+## Developer Identity & Ownership
+**Developed by: Mohamed Ahmed Al-Bashir**
+**Copyright © 2026 Mohamed Ahmed Al-Bashir. All rights reserved.**
 
-## التقنيات المستخدمة
-- HTML5
-- CSS
-- JavaScript
+This project was built with dedication to provide a premium educational experience. Unauthorized redistribution, modification, or commercial use without explicit permission is strictly prohibited.
 
+## Features
+- **Bilingual Support**: Fully localized in Arabic and English (LTR/RTL).
+- **Dynamic Lessons**: 20+ structured lessons ranging from beginner to advanced mastery.
+- **Interactive Coding Test**: A dedicated environment to practice JavaScript coding while improving typing speed.
+- **Gamification System**:
+  - **Points & Levels**: Earn points for every exercise.
+  - **Achievements**: Unlock 10+ professional achievements.
+  - **Badges**: Earn status badges as you progress.
+- **Performance Tracking**: Detailed statistics and charts for speed (WPM) and accuracy.
+- **Premium Design**: Sleek dark mode with interactive virtual keyboard highlighting.
 
-## كيفية التشغيل
-1. فك الضغط عن ملف المشروع
-2. افتح ملف index.html في المتصفح
-3. استمتع بتجربة التعلم!
+## Technical Details
+- **Frontend**: HTML5, Vanilla CSS3 (Custom Design System), JavaScript (ES6+).
+- **Data Persistence**: Uses `localStorage` for progress tracking.
+- **Responsive**: Fully optimized for Desktop, Tablet, and Mobile devices.
 
-## اعضاء الفريق
-- [ محمد احمد البشير ] - مطور رئيسي
-- [ماجد خالد - احمد علي عثمان] - مصمم
-- [باسل احمد العجب - رذاذ معاوية] - مساهمين
+## Installation
+Simply open `index.html` in any modern web browser. No installation or server required.
 
-## تاريخ التسليم
-[2026 - 4 - 11 ]
+---
+© 2026 Mohamed Ahmed Al-Bashir — Built with dedication. All rights reserved.
