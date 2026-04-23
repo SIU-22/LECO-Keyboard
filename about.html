@@ -26,8 +26,8 @@
                     <li><a href="lessons.html" id="nav-lessons" data-i18n="nav-lessons">الدروس</a></li>
                     <li><a href="exercises.html" id="nav-exercises" data-i18n="nav-exercises">تمارين تفاعلية</a></li>
                     <li><a href="progress.html" id="nav-progress" data-i18n="nav-progress">تقدمي</a></li>
-                    <li><a href="programming.html" id="nav-programming" data-i18n="nav-programming">تعلم البرمجة</a>
-                    </li>
+                    <li><a href="coding-test.html" id="nav-coding" data-i18n="nav-coding">اختبار البرمجة</a></li>
+                    <li><a href="programming.html" id="nav-programming" data-i18n="nav-programming">تعلم البرمجة</a></li>
                     <li><a href="about.html" id="nav-about" data-i18n="nav-about" class="active">عن الموقع</a></li>
                 </ul>
                 <div class="language-selector">
@@ -37,7 +37,7 @@
                     </button>
                 </div>
                 <div class="user-stats" id="userStats">
-                    <span><i class="fas fa-star"></i> <span id="userPoints">0</span> <span
+                    <span><i class="fas fa-star"></i> <span class="user-points-val">0</span> <span
                             data-i18n="points-label">نقطة</span></span>
                 </div>
             </div>
@@ -45,92 +45,101 @@
     </header>
 
     <main>
-        <section class="page-header">
+        <!-- ===== HERO HEADLINE ===== -->
+        <section class="page-header about-hero">
             <div class="container">
-                <h2 data-i18n="about-title"> عن موقع LECO Keyboard</h2>
+                <div class="about-hero-badge"><i class="fas fa-keyboard"></i> LECO Keyboard</div>
+                <h1 class="about-main-headline" data-i18n="about-title">حيث تلتقي سرعة الكتابة بعقلية المبرمج</h1>
             </div>
         </section>
 
         <section class="about-content">
             <div class="container">
-                <div class="about-text">
-                    <h3 data-i18n="about-story-title">قصتنا</h3>
-                    <p data-i18n="about-story-desc">موقع كيبورد LECO هو مشروع تعليمي يهدف للمساعدة على إتقان مهارة
-                        الكتابة السريعة على لوحة المفاتيح. تأسس الموقع في 2026 كجزء من مشروع جامعي لتطوير مهارات البرمجة
-                        وتقديم محتوى تعليمي مفيد.</p>
-
-                    <h3 data-i18n="about-mission-title">مهمتنا</h3>
-                    <p data-i18n="about-mission-desc">نسعى لتوفير منصة تعليمية متكاملة باللغة العربية و الانجليزية تساعد
-                        المبتدئين والمحترفين على تحسين سرعة ودقة الكتابة على الكيبورد من خلال تمارين تفاعلية ودروس
-                        منظمة.</p>
-
-                    <h3 data-i18n="about-features-title">مميزات الموقع</h3>
-                    <ul class="features-list">
-                        <li data-i18n="about-feat-1"><i class="fas fa-check-circle"></i> واجهة عربية سهلة الاستخدام</li>
-                        <li data-i18n="about-feat-2"><i class="fas fa-check-circle"></i> تمارين تفاعلية مع تقييم فوري
-                        </li>
-                        <li data-i18n="about-feat-3"><i class="fas fa-check-circle"></i> إحصائيات مفصلة عن تقدم المستخدم
-                        </li>
-                        <li data-i18n="about-feat-4"><i class="fas fa-check-circle"></i> نظام مكافآت وإنجازات لتحفيز
-                            المتعلمين</li>
-                        <li data-i18n="about-feat-5"><i class="fas fa-check-circle"></i> محتوى مجاني بالكامل</li>
-                    </ul>
+                <!-- ===== MISSION ===== -->
+                <div class="about-mission-block">
+                    <div class="about-mission-icon"><i class="fas fa-bullseye"></i></div>
+                    <div>
+                        <h2 class="about-section-title" data-i18n="about-story-title">مهمتنا</h2>
+                        <p class="about-mission-text" data-i18n="about-story-desc">في LECO Keyboard، نؤمن بأن كل سطر برمجي عظيم يبدأ بإتقان لوحة المفاتيح.</p>
+                    </div>
                 </div>
 
-                <div class="team-grid">
-                    <!-- الأعضاء الموجودين -->
+                <!-- ===== WHY LECO ===== -->
+                <div class="about-why-block">
+                    <h2 class="about-section-title about-why-title" data-i18n="about-mission-title">لماذا LECO؟</h2>
+                    <p class="about-why-desc" data-i18n="about-mission-desc">نُدرك أن الطلاب والمبرمجين المبتدئين يحتاجون إلى أكثر من مجرد تمارين — يحتاجون إلى أدوات قياس موثوقة وتغذية راجعة فورية. لهذا بنينا LECO على ثلاثة ركائز تقنية لا تُتنازل عنها:</p>
+                </div>
 
-                    <div class="team-member">
-
-                        <h4>محمد احمد البشير</h4>
-                        <p data-i18n="role-ux">مصمم تجربة المستخدم</p>
-                        <div class="social-links">
-
-                        </div>
-                    </div>
-                    <div class="team-member">
-
-                        <h4>باسل احمد العجب</h4>
-                        <p data-i18n="role-dev">مطور الواجهات الأمامية</p>
-                        <div class="social-links">
-
-                        </div>
-                    </div>
-
-                    <div class="team-member">
-
-                        <h4>ماجد خالد</h4>
-                        <p data-i18n="role-content">مطور المحتوى التعليمي</p>
-                        <div class="social-links">
-
-                        </div>
+                <!-- ===== 3 KEY PILLARS ===== -->
+                <div class="about-pillars-grid">
+                    <div class="about-pillar-card">
+                        <div class="pillar-icon pillar-icon--accuracy"><i class="fas fa-crosshairs"></i></div>
+                        <h3 class="pillar-title" data-i18n="about-features-title">ركائزنا التقنية</h3>
+                        <ul class="pillar-list">
+                            <li class="pillar-item" data-i18n="about-feat-1">
+                                <span class="pillar-num">01</span>
+                                <span>دقة الحسابات: نقيس سرعتك بوحدة WPM مع حساب دقيق لمعدل الخطأ وصافي الكلمات الصحيحة.</span>
+                            </li>
+                            <li class="pillar-item" data-i18n="about-feat-2">
+                                <span class="pillar-num">02</span>
+                                <span>المنهجية التعليمية: مسار تعليمي متدرج — من الصف الأساسي للكيبورد حتى كتابة أكواد Python وJava.</span>
+                            </li>
+                            <li class="pillar-item" data-i18n="about-feat-3">
+                                <span class="pillar-num">03</span>
+                                <span>تجربة مستخدم سلسة: واجهة ثنائية اللغة، تصميم داكن يُريح العينين، ومؤشرات تقدم مرئية.</span>
+                            </li>
+                        </ul>
                     </div>
 
-                    <div class="team-member">
-
-                        <h4>احمد علي عثمان</h4>
-                        <p data-i18n="role-content">مطور المحتوى التعليمي</p>
-                        <div class="social-links">
-
+                    <div class="about-stats-sidebar">
+                        <div class="about-stat-chip">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span data-i18n="about-stat-wpm">WPM Precision</span>
                         </div>
-                    </div>
-
-                    <div class="team-member">
-
-                        <h4>رذاذ معاوية</h4>
-                        <p data-i18n="role-ux">مصمم تجربة المستخدم</p>
-                        <div class="social-links">
-
+                        <div class="about-stat-chip">
+                            <i class="fas fa-code"></i>
+                            <span data-i18n="about-stat-langs">7+ Languages</span>
+                        </div>
+                        <div class="about-stat-chip">
+                            <i class="fas fa-layer-group"></i>
+                            <span data-i18n="about-stat-lessons-count">20+ Lessons</span>
+                        </div>
+                        <div class="about-stat-chip">
+                            <i class="fas fa-lock-open"></i>
+                            <span data-i18n="about-stat-free">100% Free</span>
+                        </div>
+                        <div class="about-stat-chip">
+                            <i class="fas fa-vial"></i>
+                            <span data-i18n="about-stat-exercises">50+ Exercises</span>
+                        </div>
+                        <div class="about-stat-chip">
+                            <i class="fas fa-trophy"></i>
+                            <span data-i18n="about-stat-achievements">Achievements</span>
                         </div>
                     </div>
                 </div>
+
+                <!-- ===== CTA ===== -->
+                <div class="about-cta-block">
+                    <h2 class="about-cta-headline" data-i18n="about-cta-title">ابدأ الآن</h2>
+                    <p class="about-cta-text" data-i18n="about-cta-desc">كل خبير كان مبتدئاً ذات يوم. ابدأ أول اختبار سرعة الآن، أو اغمر نفسك في أول درس برمجة — المقياس الحقيقي لتقدمك يبدأ بضغطة مفتاح.</p>
+                    <div class="about-cta-btns">
+                        <a href="exercises.html" class="btn btn-primary about-cta-primary" id="about-cta-speed">
+                            <i class="fas fa-bolt"></i>
+                            <span data-i18n="about-cta-btn">ابدأ اختبار السرعة</span>
+                        </a>
+                        <a href="programming.html" class="btn btn-secondary about-cta-secondary" id="about-cta-coding">
+                            <i class="fas fa-terminal"></i>
+                            <span data-i18n="about-cta-btn2">ابدأ أول درس برمجة</span>
+                        </a>
+                    </div>
             </div>
         </section>
     </main>
 
-    <footer>
+    <footer data-i18n="footer-rights">
         <div class="container">
-            <p>جميع الحقوق محفوظة &copy; 2026 - موقع تعليم الكتابة السريعة</p>
+            <p>© 2026 محمد أحمد البشير — بكل فخر، نسخر شغفنا لنرتقي بمجتمع المبرمجين إلى آفاقٍ جديدة. جميع الحقوق محفوظة.</p>
         </div>
     </footer>
 
