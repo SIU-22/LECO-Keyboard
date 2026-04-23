@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تقدمي - تعلم الكتابة السريعة</title>
+    <meta name="author" content="Mohamed Ahmed Al-Bashir">
+    <meta name="developer" content="Mohamed Ahmed Al-Bashir">
+    <meta name="copyright" content="Mohamed Ahmed Al-Bashir">
+    <title>تقدمي - LECO Keyboard</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -25,6 +28,7 @@
             <li><a href="lessons.html" id="nav-lessons" data-i18n="nav-lessons">الدروس</a></li>
             <li><a href="exercises.html" id="nav-exercises" data-i18n="nav-exercises">تمارين تفاعلية</a></li>
             <li><a href="progress.html" id="nav-progress" data-i18n="nav-progress" class="active">تقدمي</a></li>
+            <li><a href="coding-test.html" id="nav-coding" data-i18n="nav-coding">اختبار البرمجة</a></li>
             <li><a href="programming.html" id="nav-programming" data-i18n="nav-programming">تعلم البرمجة</a></li>
             <li><a href="about.html" id="nav-about" data-i18n="nav-about">عن الموقع</a></li>
         </ul>
@@ -35,7 +39,7 @@
             </button>
         </div>
         <div class="user-stats" id="userStats">
-            <span><i class="fas fa-star"></i> <span id="userPoints">0</span> <span data-i18n="points-label">نقطة</span></span>
+            <span><i class="fas fa-star"></i> <span class="user-points-val">0</span> <span data-i18n="points-label">نقطة</span></span>
         </div>
     </div>
 </nav>
@@ -109,12 +113,12 @@
                     </div>
                 </div>
 
-                <div class="badges">
-                    <h3>الشارات التي حصلت عليها</h3>
-                    <div class="badges-grid" id="badgesList">
-                        <!-- الشارات ستظهر هنا -->
-                    </div>
-                </div>
+    <div class="badges">
+        <h3 data-i18n="badges-title">الشارات التي حصلت عليها</h3>
+        <div class="badges-grid" id="badgesList">
+            <!-- الشارات ستظهر هنا -->
+        </div>
+    </div>
                 <div class="danger-zone" style="margin-top: 50px; padding: 20px; border: 1px solid var(--danger); border-radius: var(--radius-md); text-align: center;">
                     <h3 style="color: var(--danger); margin-bottom: 10px;">منطقة الخطر</h3>
                     <p style="margin-bottom: 20px;">حذف كافة البيانات والتقدم الخاص بك بشكل نهائي</p>
@@ -124,9 +128,9 @@
         </section>
     </main>
 
-    <footer>
+    <footer data-i18n="footer-rights">
         <div class="container">
-            <p>جميع الحقوق محفوظة &copy; 2026</p>
+            <p>© 2026 محمد أحمد البشير — بكل فخر، نسخر شغفنا لنرتقي بمجتمع المبرمجين إلى آفاقٍ جديدة. جميع الحقوق محفوظة.</p>
         </div>
     </footer>
 
