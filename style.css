@@ -317,12 +317,19 @@ body::after {
 .test-text {
     line-height: 1.7;
     white-space: pre-wrap;
-    word-break: break-all;
+    word-break: normal;
+    overflow-wrap: break-word;
+    font-feature-settings: "liga" 1, "clig" 1;
 }
 
 .test-text span, .target-text span {
     position: relative;
     transition: all 0.2s;
+    display: inline;
+    letter-spacing: 0;
+    margin: 0;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .correct-char {
@@ -936,6 +943,9 @@ body::after {
     text-align: center;
     font-family: 'Cairo', monospace;
     color: var(--text-primary);
+    word-break: normal;
+    overflow-wrap: break-word;
+    font-feature-settings: "liga" 1, "clig" 1;
 }
 .target-text[lang="ar"] { direction: rtl; font-size: 1.7rem; }
 .target-text[lang="en"] { direction: ltr; font-family: 'Courier New', monospace; }
@@ -1053,7 +1063,7 @@ body::after {
     background-color: rgba(239, 68, 68, 0.3);
     color: #fca5a5;
     border-radius: 3px;
-    padding: 1px 3px;
+    padding: 1px 0;
     border-bottom: 2px solid var(--danger);
 }
 
