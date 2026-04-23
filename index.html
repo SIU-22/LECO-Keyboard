@@ -2,8 +2,17 @@
 <html lang="ar" dir="rtl">
 
 <head>
+    <title>LECO | منصة تطوير مهارات المبرمجين وسرعة الطباعة</title>
+
+    <meta name="description"
+        content="منصة LECO تساعد المبرمجين والطلاب على احتراف سرعة الطباعة وكتابة الأكواد بدقة عالية عبر دروس تفاعلية ودعم للغات برمجة متعددة.">
+
+    <meta property="og:locale" content="ar_AR">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Mohamed Ahmed Al-Bashir">
+    <meta name="developer" content="Mohamed Ahmed Al-Bashir">
+    <meta name="copyright" content="Mohamed Ahmed Al-Bashir">
     <title>تعلم الكتابة السريعة - الرئيسية</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
@@ -26,6 +35,7 @@
                     <li><a href="lessons.html" id="nav-lessons" data-i18n="nav-lessons">الدروس</a></li>
                     <li><a href="exercises.html" id="nav-exercises" data-i18n="nav-exercises">تمارين تفاعلية</a></li>
                     <li><a href="progress.html" id="nav-progress" data-i18n="nav-progress">تقدمي</a></li>
+                    <li><a href="coding-test.html" id="nav-coding" data-i18n="nav-coding">اختبار البرمجة</a></li>
                     <li><a href="programming.html" id="nav-programming" data-i18n="nav-programming">تعلم البرمجة</a>
                     </li>
                     <li><a href="about.html" id="nav-about" data-i18n="nav-about">عن الموقع</a></li>
@@ -37,7 +47,7 @@
                     </button>
                 </div>
                 <div class="user-stats" id="userStats">
-                    <span><i class="fas fa-star"></i> <span id="userPoints">0</span> <span
+                    <span><i class="fas fa-star"></i> <span class="user-points-val">0</span> <span
                             data-i18n="points-label">نقطة</span></span>
                 </div>
             </div>
@@ -100,84 +110,9 @@
 
         <section class="keyboard-layout">
             <div class="container">
-                <h2 class="section-title">تعلم وضع الأصابع الصحيح</h2>
+                <h2 class="section-title" data-i18n="keyboard-guide-title">تعلم وضع الأصابع الصحيح</h2>
                 <div class="keyboard-diagram">
-                    <!-- الصف الأول (الأرقام) -->
-                    <div class="keyboard-row row-1">
-                        <div class="key" style="border-top:2px solid #ef4444">`</div>
-                        <div class="key" style="border-top:2px solid #ef4444">1</div>
-                        <div class="key" style="border-top:2px solid #f97316">2</div>
-                        <div class="key" style="border-top:2px solid #eab308">3</div>
-                        <div class="key" style="border-top:2px solid #22c55e">4</div>
-                        <div class="key" style="border-top:2px solid #22c55e">5</div>
-                        <div class="key" style="border-top:2px solid #14b8a6">6</div>
-                        <div class="key" style="border-top:2px solid #14b8a6">7</div>
-                        <div class="key" style="border-top:2px solid #3b82f6">8</div>
-                        <div class="key" style="border-top:2px solid #8b5cf6">9</div>
-                        <div class="key" style="border-top:2px solid #ec4899">0</div>
-                        <div class="key" style="border-top:2px solid #ec4899">-</div>
-                        <div class="key" style="border-top:2px solid #ec4899">=</div>
-                        <div class="key wide-backspace" style="border-top:2px solid #ec4899" data-i18n="key-back">Back
-                        </div>
-                    </div>
-
-                    <!-- الصف الثاني (QWERTY) -->
-                    <div class="keyboard-row row-2">
-                        <div class="key wide-tab" data-i18n="key-tab">Tab</div>
-                        <div class="key" style="border-top:2px solid #ef4444">q</div>
-                        <div class="key" style="border-top:2px solid #f97316">w</div>
-                        <div class="key" style="border-top:2px solid #eab308">e</div>
-                        <div class="key" style="border-top:2px solid #22c55e">r</div>
-                        <div class="key" style="border-top:2px solid #22c55e">t</div>
-                        <div class="key" style="border-top:2px solid #14b8a6">y</div>
-                        <div class="key" style="border-top:2px solid #14b8a6">u</div>
-                        <div class="key" style="border-top:2px solid #3b82f6">i</div>
-                        <div class="key" style="border-top:2px solid #8b5cf6">o</div>
-                        <div class="key" style="border-top:2px solid #ec4899">p</div>
-                        <div class="key" style="border-top:2px solid #ec4899">[</div>
-                        <div class="key" style="border-top:2px solid #ec4899">]</div>
-                        <div class="key" style="border-top:2px solid #ec4899">\</div>
-                    </div>
-
-                    <!-- الصف الثالث (ASDF) - الصف الأساسي -->
-                    <div class="keyboard-row row-3">
-                        <div class="key wide-caps" data-i18n="key-caps">Caps</div>
-                        <div class="key" style="border-top:2px solid #ef4444">a</div>
-                        <div class="key" style="border-top:2px solid #f97316">s</div>
-                        <div class="key" style="border-top:2px solid #eab308">d</div>
-                        <div class="key" style="border-top:2px solid #22c55e; border-bottom:3px solid #a78bfa">f</div>
-                        <div class="key" style="border-top:2px solid #22c55e">g</div>
-                        <div class="key" style="border-top:2px solid #14b8a6">h</div>
-                        <div class="key" style="border-top:2px solid #14b8a6; border-bottom:3px solid #a78bfa">j</div>
-                        <div class="key" style="border-top:2px solid #3b82f6">k</div>
-                        <div class="key" style="border-top:2px solid #8b5cf6">l</div>
-                        <div class="key" style="border-top:2px solid #ec4899">;</div>
-                        <div class="key" style="border-top:2px solid #ec4899">'</div>
-                        <div class="key wide-enter" style="border-top:2px solid #ec4899" data-i18n="key-enter">Enter
-                        </div>
-                    </div>
-
-                    <!-- الصف الرابع (ZXCV) -->
-                    <div class="keyboard-row row-4">
-                        <div class="key wide-shift" data-i18n="key-shift">Shift</div>
-                        <div class="key" style="border-top:2px solid #ef4444">z</div>
-                        <div class="key" style="border-top:2px solid #f97316">x</div>
-                        <div class="key" style="border-top:2px solid #eab308">c</div>
-                        <div class="key" style="border-top:2px solid #22c55e">v</div>
-                        <div class="key" style="border-top:2px solid #22c55e">b</div>
-                        <div class="key" style="border-top:2px solid #14b8a6">n</div>
-                        <div class="key" style="border-top:2px solid #14b8a6">m</div>
-                        <div class="key" style="border-top:2px solid #3b82f6">,</div>
-                        <div class="key" style="border-top:2px solid #8b5cf6">.</div>
-                        <div class="key" style="border-top:2px solid #ec4899">/</div>
-                        <div class="key wide-shift" data-i18n="key-shift">Shift</div>
-                    </div>
-
-                    <!-- الصف الخامس (Space) -->
-                    <div class="keyboard-row row-5">
-                        <div class="key wide-space" style="border-top:2px solid #6366f1" data-i18n="key-space">Space
-                        </div>
-                    </div>
+                    <!-- سيتم توليد لوحة المفاتيح ديناميكياً عبر JavaScript -->
                 </div>
 
 
@@ -226,12 +161,11 @@
 
     <footer data-i18n="footer-rights">
         <div class="container">
-            <p>جميع الحقوق محفوظة &copy; 2026 - موقع تعليم الكتابة السريعة</p>
+            <p>© 2026 محمد أحمد البشير — بكل فخر، نسخر شغفنا لنرتقي بمجتمع المبرمجين إلى آفاقٍ جديدة. جميع الحقوق محفوظة.</p>
         </div>
     </footer>
 
     <script src="typing.js"></script>
-    <script type="module" src="auth.js"></script>
 </body>
 
 </html>
